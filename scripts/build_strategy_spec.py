@@ -20,6 +20,7 @@ import sys
 import json
 import pathlib
 import datetime
+import re
 
 
 def esc(s):
@@ -61,6 +62,20 @@ def sanitize(text):
     t = t.replace("Laura Serna Gaviria", "Auftraggeberin")
     return t
 
+
+
+def resolve_pid(s):
+    """Extrahiert aus einem Skill-Dict die numerische Perspektiven-ID.
+    - id='Perspektive 1' => '1'
+    - skill_id='Perspektive 4' => '4'
+    - id=1 => '1'
+    - sonst '?'
+    """
+    raw = s.get('id') or s.get('skill_id') or '?'
+    if isinstance(raw, str):
+        m = re.search(r'(\d+)', raw)
+        return m.group(1) if m else raw
+    return str(raw)
 
 def extract_text(v, _depth=0):
     """Konvertiert ein beliebiges Feld rekursiv in lesbaren Text (UNCUT).
@@ -200,7 +215,7 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
             if principles:
                 whitebox_blocks.append({
                     "type": "table",
-                    "headers": [f"Perspektive {sanitize(esc(s.get('id','')))} — angewandte Prinzipien", "Anwendung"],
+                    "headers": [f"{sanitize(esc(s.get('id', s.get('skill_id',''))))} — angewandte Prinzipien", "Anwendung"],
                     "rows": [[sanitize(esc(p.get("principle", p) if isinstance(p, dict) else p)),
                               sanitize(esc(p.get("application", "—") if isinstance(p, dict) else "—"))]
                              for p in principles[:8]],
@@ -210,10 +225,17 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
     # Ebene I: Perspektiven — VOLLSTÄNDIG (alle Phasen + report + strategies + prediction)
     persp_blocks = []
     for s in skills:
-        pid = sanitize(esc(s.get("id", "?")))
+        pid = resolve_pid(s)
+        # Titel: 'Perspektive X — Name' (nicht doppelt, keine leere Spalte nach Bindestrich)
+        raw_name = s.get('perspective') or s.get('name') or s.get('skill_name') or ''
+        if raw_name.strip():
+            title = f"Perspektive {pid} — {sanitize(esc(raw_name))}"
+        else:
+            title = f"Perspektive {pid}"
         persp_blocks.append({
-            "type": "box", "style": "finding",
-            "title": f"Perspektive {pid} — {sanitize(esc(s.get('perspective', s.get('name',''))))}",
+            "type": "box",
+            "style": "finding",
+            "title": title,
             "text": extract_text(s.get("analysis", s.get("summary", "—")))
         })
         # report-Dict (executive_summary, reasoning, recommended_strategy, etc.)
@@ -384,7 +406,7 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
                     if txt and len(txt.strip()) > 10:
                         step_blocks.append({
                             "type": "bullets",
-                            "items": [f"Schritt {step_num} [Perspektive {sanitize(esc(s.get('id','')))}]: {txt}"]
+                            "items": [f"Schritt {step_num} [Perspektive {resolve_pid(s)}]: {txt}"]
                         })
                         step_num += 1
     # Fallback: wenn kane implementation_steps, nimm die COA-A actions

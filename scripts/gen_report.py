@@ -43,8 +43,8 @@ PREAMBLE = r"""%!TEX program = xelatex
 \usepackage{fancyhdr}\usepackage[explicit]{titlesec}\usepackage{hyperref}
 \usepackage{longtable}\usepackage{booktabs}\usepackage{array}\usepackage{enumitem}
 \usepackage{listings}\usepackage[most]{tcolorbox}\usepackage{graphicx}
-\usepackage{setspace}\usepackage{microtype}\usepackage{parskip}\usepackage{afterpage}\usepackage{pagecolor}\usepackage{eso-pic}\usepackage{atbegshi}
-\usepackage{seqsplit}\let\cleardoublepage\clearpage
+\usepackage{setspace}\usepackage{microtype}\usepackage{parskip}\usepackage{afterpage}\usepackage{pagecolor}\usepackage{eso-pic}
+\usepackage{seqsplit}
 \setmainfont{Inter}[UprightFont=*-Regular,BoldFont=*-Bold,ItalicFont=*-Italic,BoldItalicFont=*-BoldItalic,Scale=1.0]
 \setmonofont{DejaVu Sans Mono}[Scale=0.82]
 \geometry{a4paper, top=22mm, bottom=24mm, left=22mm, right=22mm, headheight=14pt, headsep=8mm}
@@ -61,7 +61,7 @@ PREAMBLE = r"""%!TEX program = xelatex
 \definecolor{rfi-blue}{RGB}{80,165,230}\definecolor{rfi-closed}{RGB}{75,80,95}
 \hypersetup{colorlinks=true, linkcolor=rfi-accent, urlcolor=rfi-accent, pdftitle={__PDFTITLE__}, pdfauthor={RFI-IRFOS Research Team}}
 \arrayrulecolor{rfi-gray!55}
-\AtBeginShipout{\AtBeginShipoutUpperLeft{\color{cover-bg}\rule{\paperwidth}{\paperheight}}}
+\AddToShipoutPictureBG{\AtPageLowerLeft{\color{cover-bg}\rule{\paperwidth}{\paperheight}}}
 \titleformat{\section}{\large\bfseries\color{rfi-white}}{}{0pt}{#1}[{\color{rfi-accent}\vspace{2pt}\noindent\rule{\linewidth}{1.5pt}}]
 \titleformat{\subsection}{\normalsize\bfseries\color{rfi-white}}{}{0pt}{#1}[{\color{rfi-accent!70}\vspace{1pt}\noindent\rule{\linewidth}{0.5pt}}]
 \titleformat{\subsubsection}{\small\bfseries\color{rfi-accent!85}}{}{0pt}{\MakeUppercase{#1}}
@@ -108,7 +108,7 @@ def table(headers, rows, widths=None):
            ' & '.join('\\textbf{\\color{rfi-white}%s}' % esc(h) for h in headers) + ' \\\\', "\\midrule", "\\endhead"]
     for r in rows:
         out.append(' & '.join((dot_cell(c) if isinstance(c, dict) else wrap_long_tokens(esc(c))) for c in r) + ' \\\\[3pt]')
-    out += ["\\bottomrule", "\\end{longtable}", "\\vspace{8pt}", ""]
+    out += ["\\bottomrule", "\\end{longtable}", ""]
     return '\n'.join(out)
 
 def block(b):
