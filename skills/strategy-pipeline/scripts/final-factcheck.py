@@ -22,6 +22,7 @@ import pathlib
 import re
 import subprocess
 import tempfile
+import shlex
 
 # Framework-Namen (HARD FAIL im Report)
 FORBIDDEN_FRAMEWORKS = [
@@ -120,21 +121,17 @@ Wenn kein Konflikt gefunden: schreibe genau eine Zeile: SAUBER"""
 
     try:
         # Hermes wirft am Ende a asyncio "Event loop is closed" RuntimeError
-        # durch subprocess.run — des umgehen wir mit Datei-Redirect statt
-        # capture_output. stdout landet in out.txt, wird danach gelesen.
+        # die durch subprocess.run durchbricht. Deshalb: Shell-Pipe mit
+        # Datei-Redirect — des Parent-subprocess exited sauber (rc=0),
+        # der asyncio-Error passiert nur im Child (Exception ignored).
         out_file = pathlib.Path(tempfile.mktemp(suffix=".txt"))
-        with open(out_file, "w") as f:
-            result = subprocess.run(
-                ["hermes", "chat", "-q", prompt, "-Q",
-                 "--skills", "final-factcheck"],
-                stdout=f, stderr=subprocess.PIPE, timeout=180,
-            )
+        cmd = f'hermes chat -q {shlex.quote(prompt)} -Q --skills final-factcheck > {out_file} 2>/dev/null'
+        result = subprocess.run(cmd, shell=True, timeout=180)
         out = out_file.read_text(encoding="utf-8", errors="ignore")
         out_file.unlink(missing_ok=True)
         if not out.strip() and result.returncode != 0:
-            err = (result.stderr or b"").decode(errors="ignore")[:200]
-            return [f"WARN: LLM-Check Fehler (rc={result.returncode}): "
-                    f"{err}. Pattern-Check läuft weiter."]
+            return [f"WARN: LLM-Check Fehler (rc={result.returncode}). "
+                    f"Pattern-Check läuft weiter."]
     except Exception as e:
         return [f"WARN: LLM-Check nicht ausführbar ({e}). Pattern-Check läuft weiter."]
 
