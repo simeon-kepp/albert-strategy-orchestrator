@@ -40,6 +40,7 @@ FORBIDDEN_FRAMEWORKS = [
     ("gabor mate counsel", "Perspektive 1"),
     ("gabor", "Perspektive 1"),
     ("ooda", "Perspektive 2"),
+    ("game_theory", "Perspektive 4"),
     ("game theory", "Perspektive 4"),
     ("game-theoretic", "Perspektive 4"),
     ("systems thinking", "Perspektive 3"),
@@ -60,6 +61,33 @@ def sanitize(text: str) -> str:
         t = t.replace(fw, repl)
         t = t.replace(fw.title(), repl)
     return t
+
+
+def extract_text(v) -> str:
+    """Konvertiert ein beliebiges Feld (Dict/List/String) in lesbaren Text.
+
+    Das Orchestrator-JSON hat oft verschachtelte Dicts in 'analysis'/'summary'.
+    Wir nehmen den lesbaren Teil (report/summary/text) und werfen die
+    Roh-Struktur (context_dimensions, metrics, etc.) weg.
+    """
+    if v is None:
+        return "—"
+    if isinstance(v, str):
+        return sanitize(v)
+    if isinstance(v, dict):
+        # Priorität: report > summary > analysis > erste lesbare value
+        for key in ("report", "summary", "analysis", "text", "narrative"):
+            if key in v and isinstance(v[key], str):
+                return sanitize(v[key])
+        # Ansonsten: nur String-Values (keine verschachtelten Dicts)
+        parts = []
+        for k, val in v.items():
+            if isinstance(val, str) and len(val) > 20:
+                parts.append(f"{k}: {val}")
+        return sanitize("\n".join(parts)) if parts else "—"
+    if isinstance(v, list):
+        return sanitize("\n".join(f"• {extract_text(i)}" for i in v[:6]))
+    return sanitize(str(v))
 
 
 def build(consolidated: dict, facts: dict, title: str) -> dict:
@@ -155,7 +183,7 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
         persp_blocks.append({
             "type": "box", "style": "finding",
             "title": f"Perspektive {sanitize(esc(s.get('id','')))} — {sanitize(esc(s.get('perspective', s.get('name',''))))}",
-            "text": sanitize(esc(s.get("summary", s.get("analysis", "—"))))
+            "text": extract_text(s.get("summary", s.get("analysis", "—")))
         })
         # COA pro Perspektive
         pcoa = primary.get(s.get("id", ""), {})
@@ -245,6 +273,7 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
     spec = {
         "title": title,
         "app": "RFI-IRFOS Strategie- & Versagensbericht",
+        "runhead": "Strategie- & Versagensbericht",
         "subtitle": f"Konsens-Score {consensus}% · {len(skills)} Perspektiven · RFI-IRFOS Pipeline",
         "meta": meta,
         "exec_summary": exec_summary,
