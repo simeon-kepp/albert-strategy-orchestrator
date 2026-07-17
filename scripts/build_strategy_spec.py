@@ -49,10 +49,10 @@ FORBIDDEN_FRAMEWORKS = [
 
 
 def sanitize(text: str) -> str:
-    """Ersetzt Framework-Namen durch neutrale Perspektiven-Bezeichnungen.
+    """Ersetzt Framework-Namen + Testfall-Namen durch neutrale Bezeichnungen.
 
-    Des JSON enthält oft Framework-Referenzen (z.B. 'sun_tzu + systems').
-    Die Härte-Regel: im Report erscheinen NUR 'Perspektive 1-4'.
+    Härte-Regel: im Report erscheinen NUR 'Perspektive 1-4' + generische
+    Begriffe (Auftraggeberin statt Laura).Domän-agnostisch.
     """
     if not isinstance(text, str):
         return text
@@ -60,6 +60,9 @@ def sanitize(text: str) -> str:
     for fw, repl in FORBIDDEN_FRAMEWORKS:
         t = t.replace(fw, repl)
         t = t.replace(fw.title(), repl)
+    # Testfall-Name anonymisieren (general-purpose Konformität)
+    t = t.replace("Laura", "Auftraggeberin")
+    t = t.replace("Laura Serna Gaviria", "Auftraggeberin")
     return t
 
 

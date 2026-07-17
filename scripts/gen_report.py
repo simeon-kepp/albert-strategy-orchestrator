@@ -151,7 +151,7 @@ def build(spec):
         tex.append("{\\color{rfi-gray}\\small\\textbf{SHA-256 (base APK):}}\\\\[2pt]{\\color{rfi-white}\\ttfamily\\small %s}\n" % wrap_long_tokens(esc(spec['sha256'])))
     tex.append("\\vfill{\\color{rfi-gray}\\small rfi.irfos@gmail.com \\textbullet{} rfi-irfos.com}\\\\[4pt]\n{\\color{rfi-gray}\\small ZVR 1015608684 \\textbullet{} GISA 39261441 \\textbullet{} UID ATU83405245 \\textbullet{} Steuernummer 68 696/8736 \\textbullet{} Graz, Austria}")
     tex.append("\\newpage\\fancyhead[L]{\\small\\color{rfi-gray}\\textbf{RFI-IRFOS}}")
-    tex.append("\\tableofcontents\\newpage")
+    tex.append("\\tableofcontents\\newpage\\pagecolor{cover-bg}")
 
     # ── EXECUTIVE SUMMARY ──
     tex.append("\\section{Executive Summary}")
