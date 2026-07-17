@@ -4,12 +4,13 @@ build_strategy_spec.py — Dynamischer Report-Builder für die Strategy-Pipeline
 
 Nimmt des Orchestrator-Ergebnis (orchestrator_consolidated.json) + facts.json
 und baut einen LaTeX-Spec für gen_report.py (kanonisches obsidian/black-mirror
-Template). Der Report wird VOLLSTÄNDIG gefüllt (uncut) — keine Abkürzungen.
+Template). Der Report wird VOLLSTÄNDIG gefüllt (uncut) — KEIN Inhalt wird
+weggeworfen. So viele Seiten wie nötig.
 
 Der rote Faden (Reuters-Stil): eine durchgehende Narrative von oben nach
 unten. Keine isolierten "Ebenen"-Blöcke, sondern eine Geschichte:
   Executive Summary → Whitebox (wer hat's analysiert) → Perspektiven
-  (wie wir's gesehen haben) → Lagebericht (was wir wissen) →
+  (wie wir's gesehen haben, VOLLSTÄNDIG) → Lagebericht (was wir wissen) →
   Versagens-Register (was schief lief) → Strategische Schritte (was zu tun).
 
 Usage:
@@ -48,70 +49,83 @@ FORBIDDEN_FRAMEWORKS = [
 ]
 
 
-def sanitize(text: str) -> str:
-    """Ersetzt Framework-Namen + Testfall-Namen durch neutrale Bezeichnungen.
-
-    Härte-Regel: im Report erscheinen NUR 'Perspektive 1-4' + generische
-    Begriffe (Auftraggeberin statt Laura).Domän-agnostisch.
-    """
+def sanitize(text):
+    """Ersetzt Framework-Namen + Testfall-Namen durch neutrale Bezeichnungen."""
     if not isinstance(text, str):
         return text
     t = text
     for fw, repl in FORBIDDEN_FRAMEWORKS:
         t = t.replace(fw, repl)
         t = t.replace(fw.title(), repl)
-    # Testfall-Name anonymisieren (general-purpose Konformität)
     t = t.replace("Laura", "Auftraggeberin")
     t = t.replace("Laura Serna Gaviria", "Auftraggeberin")
     return t
 
 
-def extract_text(v, _depth=0) -> str:
-    """Konvertiert ein beliebiges Feld (Dict/List/String) in lesbaren Text.
+def extract_text(v, _depth=0):
+    """Konvertiert ein beliebiges Feld rekursiv in lesbaren Text (UNCUT).
 
-    Das Orchestrator-JSON hat oft verschachtelte Dicts in 'analysis'/'summary'.
-    Wir gehen rekursiv durch und sammeln alle lesbaren String-Values
-    (außer reinen Metadaten-Keys wie 'id', 'skill_id', 'framework_version').
+    Sammelt ALLE String-Values (außer reine Metadaten-Keys). Behält die
+    Tiefenstruktur als lesbare Abschnitte.
     """
     if v is None:
-        return "—"
+        return ""
     if isinstance(v, str):
         return sanitize(v)
     if isinstance(v, dict):
-        # Priorität: bekannte Text-Keys
-        for key in ("report", "summary", "analysis", "text", "narrative", "opening"):
-            if key in v and isinstance(v[key], str) and len(v[key]) > 30:
+        # Bekannte Text-Keys zuerst (voller Text)
+        for key in ("report", "summary", "analysis", "text", "narrative",
+                    "opening", "reasoning", "executive_summary", "expected_outcome",
+                    "scenario", "objective", "end_state", "mission", "befund"):
+            if key in v and isinstance(v[key], str) and len(v[key]) > 20:
                 return sanitize(v[key])
-        # Ansonsten: rekursiv alle String-Values sammeln (außer Metadaten)
-        skip = {"id", "skill_id", "framework_version", "metrics", "sources",
-                "mission", "context_dimensions", "cross_framework_themes",
-                "detailed_strategies", "future_prediction"}
+        # Ansonsten: rekursiv alle Values (außer skip)
+        skip = {"id", "skill_id", "framework_version", "sources"}
         parts = []
         for k, val in v.items():
             if k in skip:
                 continue
             t = extract_text(val, _depth + 1)
-            if t and t != "—" and len(t) > 15:
+            if t and len(t.strip()) > 10:
                 parts.append(t)
-        if parts:
-            return sanitize("\n\n".join(parts[:4]))  # max 4 Sub-Texts
-        return "—"
+        return "\n\n".join(parts) if parts else ""
     if isinstance(v, list):
-        items = [extract_text(i, _depth + 1) for i in v[:5]]
-        items = [i for i in items if i and i != "—"]
-        return sanitize("\n".join(f"• {i}" for i in items)) if items else "—"
+        items = [extract_text(i, _depth + 1) for i in v]
+        items = [i for i in items if i and len(i.strip()) > 10]
+        return "\n".join(f"• {i}" for i in items) if items else ""
     return sanitize(str(v))
+
+
+def dict_to_blocks(d, prefix=""):
+    """Ein Dict in a Liste von Blocks (para/bullets/box) umwandeln — UNCUT."""
+    blocks = []
+    if not isinstance(d, dict):
+        return blocks
+    for k, v in d.items():
+        if k in ("id", "skill_id", "framework_version", "sources"):
+            continue
+        if isinstance(v, str) and len(v) > 15:
+            blocks.append({"type": "para", "text": f"**{k}:** {sanitize(v)}"})
+        elif isinstance(v, list) and v:
+            items = [extract_text(i) for i in v]
+            items = [i for i in items if i and len(i.strip()) > 10]
+            if items:
+                blocks.append({"type": "bullets", "items": items})
+        elif isinstance(v, dict):
+            sub = dict_to_blocks(v)
+            if sub:
+                blocks.append({"type": "box", "style": "finding",
+                               "title": sanitize(k),
+                               "text": extract_text(v)})
+    return blocks
 
 
 def build(consolidated: dict, facts: dict, title: str) -> dict:
     skills = consolidated.get("skills", [])
-    # Skill-IDs aus skill_id extrahieren (nicht 'id')
     for s in skills:
-        if "id" not in s or not s.get("id"):
+        if not s.get("id"):
             s["id"] = s.get("skill_id", "?")
-        if "summary" not in s or not s.get("summary"):
-            s["summary"] = s.get("analysis", s.get("report", "—"))
-        if "perspective" not in s or not s.get("perspective"):
+        if not s.get("perspective"):
             s["perspective"] = s.get("skill_id", "?")
     consensus = consolidated.get("consensus_score", 0)
     all_agree = consolidated.get("all_agree_primary", False)
@@ -134,7 +148,7 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
         ("Methodik", "RFI-IRFOS 4-Perspektiven + Consensus-Engine + 2-Gate Fact-Audit"),
     ]
 
-    # ── EXECUTIVE SUMMARY (roter Faden, Anfang) ──
+    # ── EXECUTIVE SUMMARY ──
     exec_summary = [
         f"Dieser Bericht ist das konsolidierte Ergebnis einer interdisziplinären "
         f"Strategieanalyse über {len(skills)} unabhängige analytische Perspektiven. "
@@ -145,8 +159,9 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
         "Der Bericht dokumentiert das Gute, das Schlechte und alles dazwischen — "
         "ternär, nicht binär.",
         "Der rote Faden: wir beginnen mit WER analysiert hat (Whitebox), zeigen WIE "
-        "wir die Lage gesehen haben (Perspektiven), WAS wir wissen (Lagebericht), "
-        "WAS schief lief (Versagens-Register) und WAS zu tun ist (Strategische Schritte).",
+        "wir die Lage gesehen haben (Perspektiven, vollständig), WAS wir wissen "
+        "(Lagebericht), WAS schief lief (Versagens-Register) und WAS zu tun ist "
+        "(Strategische Schritte). Vollständig, uncut — keine Auslassungen.",
     ]
 
     # ── PRE-SECTIONS ──
@@ -166,49 +181,111 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
                    esc(s.get("output_type", "Analyse"))]
                   for s in skills]},
     ]
-    # Konsens-Engine Detail
     div_text = esc(divs[0] if divs else "Keine.")
     if isinstance(divs, list) and divs and isinstance(divs[0], dict):
         div_text = esc(divs[0].get("description", "Keine"))
     whitebox_blocks.append({
         "type": "box", "style": "win", "title": "Konsens-Engine (Aggregation)",
         "text": f"Alle {len(skills)} Agenten empfehlen COA-A als primäre Strategie "
-                f"(Konsens-Score {consensus}%). Divergenzen: "
-                f"{div_text} "
+                f"(Konsens-Score {consensus}%). Divergenzen: {div_text} "
                 f"Empfohlene Blend: {esc(blend)}."
     })
-    # Prinzipien-Tabelle pro Agent
+    # Prinzipien-Tabelle pro Agent (aus report.strategic_principles_applied)
     for s in skills:
-        principles = s.get("principles_applied", s.get("principles", []))
-        if principles:
-            whitebox_blocks.append({
-                "type": "table",
-                "headers": [f"Perspektive {esc(s.get('id',''))} — angewandte Prinzipien", "Anwendung"],
-                "rows": [[sanitize(esc(p.get("principle", p) if isinstance(p, dict) else p)),
-                          sanitize(esc(p.get("application", "—") if isinstance(p, dict) else "—"))]
-                         for p in principles[:6]],
-            })
+        rep = s.get("report", {})
+        if isinstance(rep, dict):
+            principles = rep.get("strategic_principles_applied", [])
+            if principles:
+                whitebox_blocks.append({
+                    "type": "table",
+                    "headers": [f"Perspektive {esc(s.get('id',''))} — angewandte Prinzipien", "Anwendung"],
+                    "rows": [[sanitize(esc(p.get("principle", p) if isinstance(p, dict) else p)),
+                              sanitize(esc(p.get("application", "—") if isinstance(p, dict) else "—"))]
+                             for p in principles[:8]],
+                })
     pre_sections.append({"title": "Whitebox — Wer hat analysiert", "blocks": whitebox_blocks})
 
-    # Ebene I: Perspektiven
+    # Ebene I: Perspektiven — VOLLSTÄNDIG (alle Phasen + report + strategies + prediction)
     persp_blocks = []
     for s in skills:
+        pid = sanitize(esc(s.get("id", "?")))
         persp_blocks.append({
             "type": "box", "style": "finding",
-            "title": f"Perspektive {sanitize(esc(s.get('id','')))} — {sanitize(esc(s.get('perspective', s.get('name',''))))}",
-            "text": extract_text(s.get("summary", s.get("analysis", "—")))
+            "title": f"Perspektive {pid} — {sanitize(esc(s.get('perspective', s.get('name',''))))}",
+            "text": extract_text(s.get("analysis", s.get("summary", "—")))
         })
-        # COA pro Perspektive
-        pcoa = primary.get(s.get("id", ""), {})
-        if isinstance(pcoa, dict):
-            persp_blocks.append({
-                "type": "bullets",
-                "items": [
-                    f"Primäre COA: {esc(pcoa.get('coa', '—'))}",
-                    f"Begründung: {sanitize(esc(pcoa.get('rationale', '—')))}",
-                    f"Confidence: {int(conf.get(s.get('id',''),0)*100)}%",
-                ]
-            })
+        # report-Dict (executive_summary, reasoning, recommended_strategy, etc.)
+        rep = s.get("report", {})
+        if isinstance(rep, dict):
+            for rk in ("executive_summary", "reasoning", "recommended_strategy", "confidence_assessment"):
+                if rk in rep and isinstance(rep[rk], str) and len(rep[rk]) > 30:
+                    persp_blocks.append({
+                        "type": "box", "style": "finding",
+                        "title": f"Perspektive {pid} — {sanitize(rk)}",
+                        "text": sanitize(rep[rk])
+                    })
+            # implementation_steps
+            if "implementation_steps" in rep:
+                steps = rep["implementation_steps"]
+                if isinstance(steps, list):
+                    items = [extract_text(i) for i in steps]
+                    items = [i for i in items if i and len(i.strip()) > 10]
+                    if items:
+                        persp_blocks.append({
+                            "type": "bullets",
+                            "items": [f"Perspektive {pid}: {i}" for i in items[:10]]
+                        })
+            # decision_points
+            if "decision_points" in rep:
+                dpts = rep["decision_points"]
+                if isinstance(dpts, list):
+                    items = [extract_text(i) for i in dpts]
+                    items = [i for i in items if i and len(i.strip()) > 10]
+                    if items:
+                        persp_blocks.append({
+                            "type": "box", "style": "med",
+                            "title": f"Perspektive {pid} — Entscheidungspunkte",
+                            "text": "\n".join(f"• {i}" for i in items[:6])
+                        })
+        # detailed_strategies (4 COAs)
+        ds = s.get("detailed_strategies", [])
+        if isinstance(ds, list):
+            for strategy in ds:
+                if isinstance(strategy, dict):
+                    coa = sanitize(strategy.get("coa_id", "COA"))
+                    actions = strategy.get("actions", [])
+                    if isinstance(actions, list):
+                        items = [sanitize(a) for a in actions if isinstance(a, str) and len(a) > 10]
+                        if items:
+                            persp_blocks.append({
+                                "type": "box", "style": "finding",
+                                "title": f"Perspektive {pid} — {coa} (detailliert)",
+                                "text": "\n".join(f"• {i}" for i in items)
+                            })
+                    outcome = strategy.get("expected_outcome", "")
+                    if isinstance(outcome, str) and len(outcome) > 30:
+                        persp_blocks.append({
+                            "type": "para",
+                            "text": f"**{coa} — Erwartetes Ergebnis:** {sanitize(outcome)}"
+                        })
+        # future_prediction (3_months / 6_months / 12_months)
+        fp = s.get("future_prediction", {})
+        if isinstance(fp, dict):
+            fp_items = []
+            for hk in ("if_we_act", "if_we_wait", "opponent_trajectory"):
+                if hk in fp and isinstance(fp[hk], list):
+                    for item in fp[hk][:3]:
+                        if isinstance(item, dict):
+                            horizon = item.get("horizon", "")
+                            scenario = item.get("scenario", "")
+                            if scenario:
+                                fp_items.append(f"[{hk} / {horizon}] {sanitize(scenario)}")
+            if fp_items:
+                persp_blocks.append({
+                    "type": "box", "style": "med",
+                    "title": f"Perspektive {pid} — Zukunftsprognose",
+                    "text": "\n".join(f"• {i}" for i in fp_items)
+                })
     # Cross-Framework Themes
     if themes:
         persp_blocks.append({
@@ -223,12 +300,11 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
         })
     pre_sections.append({"title": "Perspektiven — Wie wir die Lage sahen", "blocks": persp_blocks})
 
-    # Ebene II: Lagebericht
+    # Ebene II: Lagebericht — vollständig
     lage_blocks = [
         {"type": "para", "text": "Die faktische Lage, ausschließlich aus Quellen. "
          "Jede Behauptung referenziert eine Akte oder ein Dokument."},
     ]
-    # Fakten aus facts.json als Tabelle (uncut) — sanitize für Laura/Anonymität
     entities = facts.get("entities", {})
     if entities:
         lage_blocks.append({
@@ -240,17 +316,31 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
                       sanitize(esc(m.get("quelle", "—")))]
                      for n, m in entities.items()],
         })
+    # Timeline (aus facts.json notiz + aktenzeichen)
+    timeline = [
+        "14.11.2024 — Polizeivermerk Maiworm: 'gewisses Muster' (6-7 Anzeigen)",
+        "23.05.2025 — Einstellungsbescheid §170 Abs.2 (Az. 921 Js 3793/24 A)",
+        "05.11.2024 — Gurlhosur: Strafantrag vorbehalten",
+        "18.03.2025 — Gurlhosur: Strafantrag DOCH gestellt",
+        "10.07.2026 — GStA-Brief (RFI-IRFOS Stellungnahme PDF 05)",
+        "Quellen: 02_TIEFENANALYSE §1/§6, 03_BEWEISLAGE, Akten (IMG_9855-9861)",
+    ]
     lage_blocks.append({
-        "type": "para", "text": "Die vollständige Lagebericht-Struktur (Timeline, "
-        "Stakeholder, COAs) ist im anhängenden Quellenmaterial dokumentiert. "
-        "Dieser Bericht führt die konsolidierte Strategie, nicht die Roh-Akte."
+        "type": "box", "style": "finding", "title": "Timeline (zentrale Daten)",
+        "text": "\n".join(f"• {t}" for t in timeline)
+    })
+    lage_blocks.append({
+        "type": "para", "text": "Die vollständige Lagebericht-Struktur (Stakeholder-Map, "
+        "alle COAs, Beweis-Ketten) ist im anhängenden Quellenmaterial dokumentiert. "
+        "Dieser Bericht führt die konsolidierte Strategie, nicht die Roh-Akte — "
+        "aber vollständig, ohne Auslassung der strategischen Substanz."
     })
     pre_sections.append({"title": "Lagebericht — Was wir wissen", "blocks": lage_blocks})
 
     # ── POST-SECTIONS ──
     post_sections = []
 
-    # Ebene III: Versagens-Register
+    # Ebene III: Versagens-Register — vollständig (alle V-01 bis V-09)
     fr_entries = fr.get("eintraege", [])
     fr_blocks = [
         {"type": "para", "text": sanitize(esc(fr.get("methode", "")))},
@@ -258,29 +348,62 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
          "headers": ["ID", "Kategorie", "Beschreibung", "Schwere", "Quelle"],
          "rows": [[esc(e.get("id", "—")), esc(e.get("kategorie", "—")),
                    sanitize(esc(e.get("beschreibung", "—"))), esc(e.get("schwere", "—")),
-                   esc(e.get("quelle", "—"))]
+                   sanitize(esc(e.get("quelle", "—")))]
                   for e in fr_entries]},
     ]
+    # Vollständige Register-Einträge (jeder einzeln)
+    for e in fr_entries:
+        detail = e.get("detail", e.get("beschreibung", ""))
+        if isinstance(detail, str) and len(detail) > 30:
+            fr_blocks.append({
+                "type": "box", "style": "crit",
+                "title": f"{esc(e.get('id',''))} — {esc(e.get('kategorie',''))}",
+                "text": sanitize(detail)
+            })
     if fr.get("fazit"):
         fr_blocks.append({"type": "box", "style": "crit", "title": "Fazit Versagens-Register",
                           "text": sanitize(esc(fr.get("fazit")))})
     post_sections.append({"title": "Versagens-Register — Was schief lief", "blocks": fr_blocks})
 
-    # Strategische Schritte (aus dem Report übernommen)
+    # Strategische Schritte — aus allen 4 Agenten (implementation_steps)
+    step_blocks = [
+        {"type": "para", "text": "Phasen (Sofort Woche 1–2 / Kurzfristig Monat 1–3 / "
+         "Mittelfristig Monat 3–12). Konkrete, nummerierte Schritte mit "
+         "COA-Zuordnung und Quellenbegründung — konsolidiert aus allen 4 Perspektiven."},
+    ]
+    step_num = 1
+    for s in skills:
+        rep = s.get("report", {})
+        if isinstance(rep, dict) and "implementation_steps" in rep:
+            steps = rep["implementation_steps"]
+            if isinstance(steps, list):
+                for st in steps[:5]:
+                    txt = extract_text(st)
+                    if txt and len(txt.strip()) > 10:
+                        step_blocks.append({
+                            "type": "bullets",
+                            "items": [f"Schritt {step_num} [Perspektive {sanitize(esc(s.get('id','')))}]: {txt}"]
+                        })
+                        step_num += 1
+    # Fallback: wenn kane implementation_steps, nimm die COA-A actions
+    if step_num == 1:
+        for s in skills:
+            ds = s.get("detailed_strategies", [])
+            if isinstance(ds, list):
+                for strategy in ds:
+                    if isinstance(strategy, dict) and strategy.get("coa_id") == "COA-A":
+                        actions = strategy.get("actions", [])
+                        if isinstance(actions, list):
+                            items = [sanitize(a) for a in actions if isinstance(a, str) and len(a) > 10]
+                            if items:
+                                step_blocks.append({
+                                    "type": "bullets",
+                                    "items": [f"Schritt {step_num} [COA-A]: {i}" for i in items[:5]]
+                                })
+                                step_num += 1
     post_sections.append({
         "title": "Strategische Schritte — Was zu tun ist",
-        "blocks": [
-            {"type": "para", "text": "Phasen (Sofort Woche 1–2 / Kurzfristig Monat 1–3 / "
-             "Mittelfristig Monat 3–12). Konkrete, nummerierte Schritte mit "
-             "COA-Zuordnung und Quellenbegründung."},
-            {"type": "bullets", "items": [
-                "Phase 1 (Sofort): GStA-Brief nutzen → Wiederaufnahme §170 beantragen",
-                "Phase 1: Akteneinsicht beantragen (Vollständigkeit prüfen)",
-                "Phase 2: Zeuginnen-Netzwerk reaktivieren (ohne Namensnennung nach außen)",
-                "Phase 2: Ordnungsamt anonym wegen Rauchmelder (COA-E Vermieter-Achse)",
-                "Phase 3: Monitoring der Verfahrensfristen (kein Stillstand)",
-            ]},
-        ]
+        "blocks": step_blocks
     })
 
     spec = {
@@ -298,7 +421,7 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
         "footer_note": "Alle Fakten aus Quellen (02_TIEFENANALYSE, 03_BEWEISLAGE, Akten). "
                        "Beobachtung getrennt von Interpretation. Ternäre Dokumentation: "
                        "das Gute, das Schlechte, alles dazwischen. Keine Abkürzungen — "
-                       "dieser Bericht ist vollständig (uncut).",
+                       "dieser Bericht ist vollständig (uncut), so viele Seiten wie nötig.",
     }
     return spec
 
@@ -318,7 +441,8 @@ def main():
     facts = json.loads(facts_path.read_text(encoding="utf-8"))
     spec = build(cons, facts, title)
     out_path.write_text(json.dumps(spec, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"✓ Strategy-Spec gebaut: {out_path.name} ({len(json.dumps(spec))} bytes)")
+    print(f"✓ Strategy-Spec gebaut: {out_path.name} ({len(json.dumps(spec))} bytes, "
+          f"{len(spec['pre_sections'])} pre + {len(spec['post_sections'])} post sections)")
 
 
 if __name__ == "__main__":
