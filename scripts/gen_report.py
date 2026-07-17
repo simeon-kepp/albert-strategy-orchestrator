@@ -108,7 +108,7 @@ def table(headers, rows, widths=None):
            ' & '.join('\\textbf{\\color{rfi-white}%s}' % esc(h) for h in headers) + ' \\\\', "\\midrule", "\\endhead"]
     for r in rows:
         out.append(' & '.join((dot_cell(c) if isinstance(c, dict) else wrap_long_tokens(esc(c))) for c in r) + ' \\\\[3pt]')
-    out += ["\\bottomrule", "\\end{longtable}", ""]
+    out += ["\\bottomrule", "\\end{longtable}", "\\vspace{8pt}", ""]
     return '\n'.join(out)
 
 def block(b):
