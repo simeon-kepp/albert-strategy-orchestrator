@@ -73,11 +73,11 @@ PREAMBLE = r"""%!TEX program = xelatex
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\headrule}{\color{rfi-accent!40}\hrule width\headwidth height\headrulewidth}
 \tcbset{
- findingbox/.style={colback=rfi-panel, colframe=rfi-accent, coltext=rfi-text, coltitle=rfi-dark, boxrule=1.2pt, arc=3pt, left=8pt, right=8pt, top=6pt, bottom=6pt, fonttitle=\bfseries},
- critbox/.style={colback=rfi-panel, colframe=rfi-red, coltext=rfi-text, coltitle=rfi-dark, boxrule=1.2pt, arc=3pt, left=8pt, right=8pt, top=6pt, bottom=6pt, fonttitle=\bfseries},
- medbox/.style={colback=rfi-panel, colframe=rfi-amber, coltext=rfi-text, coltitle=rfi-dark, boxrule=1.2pt, arc=3pt, left=8pt, right=8pt, top=6pt, bottom=6pt, fonttitle=\bfseries},
- lowbox/.style={colback=rfi-panel, colframe=rfi-gray, coltext=rfi-text, coltitle=rfi-dark, boxrule=1pt, arc=3pt, left=8pt, right=8pt, top=6pt, bottom=6pt, fonttitle=\bfseries},
- winbox/.style={colback=rfi-panel, colframe=rfi-teal, coltext=rfi-text, coltitle=rfi-dark, boxrule=1.2pt, arc=3pt, left=8pt, right=8pt, top=6pt, bottom=6pt, fonttitle=\bfseries},
+ findingbox/.style={colback=cover-bg, colframe=rfi-accent, coltext=rfi-text, coltitle=rfi-dark, boxrule=1.2pt, arc=3pt, left=8pt, right=8pt, top=6pt, bottom=6pt, fonttitle=\bfseries},
+ critbox/.style={colback=cover-bg, colframe=rfi-red, coltext=rfi-text, coltitle=rfi-dark, boxrule=1.2pt, arc=3pt, left=8pt, right=8pt, top=6pt, bottom=6pt, fonttitle=\bfseries},
+ medbox/.style={colback=cover-bg, colframe=rfi-amber, coltext=rfi-text, coltitle=rfi-dark, boxrule=1.2pt, arc=3pt, left=8pt, right=8pt, top=6pt, bottom=6pt, fonttitle=\bfseries},
+ lowbox/.style={colback=cover-bg, colframe=rfi-gray, coltext=rfi-text, coltitle=rfi-dark, boxrule=1pt, arc=3pt, left=8pt, right=8pt, top=6pt, bottom=6pt, fonttitle=\bfseries},
+ winbox/.style={colback=cover-bg, colframe=rfi-teal, coltext=rfi-text, coltitle=rfi-dark, boxrule=1.2pt, arc=3pt, left=8pt, right=8pt, top=6pt, bottom=6pt, fonttitle=\bfseries},
  codebox/.style={colback=rfi-codebg, colframe=rfi-accent!30, coltext=rfi-white, boxrule=0.5pt, arc=3pt, left=10pt, right=10pt, top=6pt, bottom=6pt, fontupper=\ttfamily\small}}
 \lstset{basicstyle=\ttfamily\small\color{rfi-white}, backgroundcolor=\color{rfi-codebg}, breaklines=true, breakatwhitespace=false, columns=fullflexible, keepspaces=true, frame=none, xleftmargin=10pt, xrightmargin=10pt, aboveskip=6pt, belowskip=6pt}
 \begin{document}\pagecolor{cover-bg}\color{rfi-text}
