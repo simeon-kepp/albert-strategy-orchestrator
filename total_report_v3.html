@@ -10,8 +10,8 @@
   p { margin: 0 0 11px 0; text-align: justify; }
   h1 { font-size: 18px; font-weight: 700; line-height: 1.35; margin: 0 0 4px 0; color: #111; }
   .subtitle { font-size: 12.5px; color: #444; margin: 0 0 22px 0; }
-  h2 { font-size: 13.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin: 24px 0 11px 0; page-break-after: avoid; }
-  h3 { font-size: 12.5px; font-weight: 700; color: #111; margin: 16px 0 5px 0; page-break-after: avoid; }
+  h2 { font-size: 13.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 6px; margin: 28px 0 13px 0; page-break-after: avoid; }
+  h3 { font-size: 12.5px; font-weight: 700; color: #111; margin: 18px 0 6px 0; page-break-after: avoid; }
   body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1a1a1a; font-size: 11.5px; line-height: 1.7; margin: 0; }
   p { margin: 0 0 11px 0; text-align: justify; }
   ul, ol { margin: 0 0 10px 0; padding-left: 18px; } li { margin-bottom: 4px; }
@@ -19,6 +19,8 @@
   .quote .source { font-size: 9.5px; color: #666; font-style: normal; margin-top: 4px; }
   .note-box { border: 1px solid #ccc; padding: 11px 15px; margin: 13px 0; font-size: 11px; color: #333; background: #fafafa; }
   .caveat-box { border-left: 3px solid #c2410c; background: #fff8f5; padding: 9px 15px; margin: 13px 0; font-size: 11px; color: #333; }
+  .agent-breakdown { border-left: 3px solid #0d3b2e; background: #f0f4f0; padding: 8px 12px; margin: 9px 0; border-radius: 0 3px 3px 0; }
+  .agent-breakdown h3 { margin-top: 0; color: #0d3b2e; }
   table.pattern { width: 100%; border-collapse: collapse; margin: 9px 0 15px 0; font-size: 10.5px; }
   table.pattern th { text-align: left; border-bottom: 1.5px solid #999; padding: 5px 8px; color: #444; font-weight: 700; }
   table.pattern td { border-bottom: 1px solid #e5e5e5; padding: 5px 8px; vertical-align: top; color: #222; }
@@ -60,6 +62,7 @@
 <nav class="toc">
   <h2>Inhaltsverzeichnis</h2>
   <ol>
+    <li><a href="#ebene0">Ebene 0 — Agent-Breakdown (Whitebox)</a></li>
     <li><a href="#ebene1">Ebene I — Vier analytische Perspektiven</a></li>
     <li><a href="#ebene2">Ebene II — Strategischer Lagebericht</a>
       <ol class="sub">
@@ -81,36 +84,95 @@
   </ol>
 </nav>
 
+<div class="divider" id="ebene0">Ebene 0 — Agent-Breakdown (Whitebox)</div>
+
+<h2 id="e0">0. Welche Agenten waren aktiv & wie sie entschieden</h2>
+<p class="subtitle">Volle Traceability des Orchestrators. Vier analytische Agenten (Perspektiven 1–4) liefen parallel, jeder produzierte einen eigenen Analyse-Report. Der Konsens-Engine aggregierte diese zu einem einzigen Strategiebericht. Keine der Agenten wird namentlich benannt — sie sind Werkzeuge der Analyse.</p>
+
+<div class="agent-breakdown">
+  <h3>Agent 1 — Perspektive 1 (Strategische Klarheit & Hebel)</h3>
+  <p><strong>Output:</strong> Empfohlene Strategie <strong>COA-A</strong> (primär). Dominante Strategie laut Prinzipien: Hebel suchen der die Gesamtsituation verschiebt ohne eigene Exposition; höchster Gewinn ohne offenen Konflikt.</p>
+  <p><strong>Entscheidung:</strong> COA-A (Wiederaufnahme §170) — einseitig besser als Nichtstun, risikiert nichts, zwingt Behörde zur Reaktion.</p>
+  <p><strong>Prinzipien angewandt (4):</strong> Hebel ohne Exposition · höchster Gewinn ohne Konflikt · Position fragen nicht moralisch · Dokumentation so dicht dass Institution reagieren muss.</p>
+</div>
+
+<div class="agent-breakdown">
+  <h3>Agent 2 — Perspektive 2 (Entscheidungs-Tempo)</h3>
+  <p><strong>Output:</strong> Empfohlene Strategie <strong>COA-A</strong> (primär, schnellerer Zyklus). Parallel COA-B, Option COA-D, Fallback COA-C.</p>
+  <p><strong>Entscheidung:</strong> COA-A — Tempovorteil (Tage statt Monate) diktiert Agenda; Überhastung vermieden (keine Links.pdf-Spekulation).</p>
+  <p><strong>Prinzipien angewandt (6):</strong> Tempo · Observe-Orient-Decide-Act · Überhastung vermeiden · Tempovorteil für Agenda · Status-quo der Gegenseite ausnutzen · Konsistente kleine Züge.</p>
+</div>
+
+<div class="agent-breakdown">
+  <h3>Agent 3 — Perspektive 3 (Systemstruktur & Rückkopplung)</h3>
+  <p><strong>Output:</strong> Empfohlene Strategie <strong>COA-A</strong> (primär). Hebelpunkt: der bereits im-System vorhandene "Muster"-Vermerk (Maiworm), nicht die Kamera-Frage.</p>
+  <p><strong>Entscheidung:</strong> COA-A — Systembruch durch Wiederaufnahme des dokumentierten Musters; zweiter Hebelpunkt (Vermieter) liegt außerhalb der Strafrecht-Arena.</p>
+  <p><strong>Prinzipien angewandt (5):</strong> Fall als System nicht Einzelfall · Rückkopplungsschleifen identifizieren · Hebelpunkt außerhalb offensichtlicher Arena · Struktur ändern nicht Symptom · Isolation als Verstärker erkennen.</p>
+</div>
+
+<div class="agent-breakdown">
+  <h3>Agent 4 — Perspektive 4 (Strategische Interaktion & Gleichgewicht)</h3>
+  <p><strong>Output:</strong> Empfohlene Strategie <strong>COA-A</strong> (primär) · COA-B parallel · COA-D Option · <strong>COA-E</strong> (Vermieter Yves Netz) als neue Achse · COA-C Fallback.</p>
+  <p><strong>Entscheidung:</strong> COA-A — dominante Strategie im wiederholten Spiel; Gleichgewicht verschiebt sich über Koordinationspunkt (GStA-Brief 10.07).</p>
+  <p><strong>Prinzipien angewandt (6):</strong> Fall als wiederholtes Spiel · dominante Strategie bestimmen · Gleichgewicht über Koordinationspunkt · Institution als Spieler mit Status-quo-Präferenz · Gesicht-wahrende Framing · Konsistente Züge bauen Reputation.</p>
+</div>
+
+<div class="note-box"><strong>Konsens-Engine (Aggregation):</strong> Alle vier Agenten empfahlen <strong>COA-A</strong> als primäre Strategie (Konsens-Score <strong>100%</strong>). Alle Agree Primary: <strong>true</strong>. Empfohlene Blend: <strong>sun_mate + systems (+ ooda tempo-layer)</strong>. Cross-Framework-Themes (≥2 Agenten): Aufsichtsweg primär / Klageerzwingung nur Fallback · Bescheidenheits-Framing · COA-A als primär · Fokus Muster+Verfahren · Links.pdf strikt zurückhalten. Divergenzen: keine (alle einig).</div>
+
+<h3>Agenten-Entscheidungsmatrix (Whitebox)</h3>
+<table class="pattern">
+  <tr><th>Agent</th><th>Primär-COA</th><th>Parallel</th><th>Option</th><th>Fallback</th><th>Confidence</th><th>Zusatz-Achse</th></tr>
+  <tr><td>1 (Klarheit/Hebel)</td><td>COA-A</td><td>COA-B</td><td>COA-D</td><td>COA-C</td><td>medium</td><td>—</td></tr>
+  <tr><td>2 (Tempo)</td><td>COA-A</td><td>COA-B</td><td>COA-D</td><td>COA-C</td><td>medium</td><td>—</td></tr>
+  <tr><td>3 (System)</td><td>COA-A</td><td>COA-B</td><td>COA-D</td><td>COA-C</td><td>medium</td><td>Vermieter (außerhalb Strafrecht)</td></tr>
+  <tr><td>4 (Interaktion)</td><td>COA-A</td><td>COA-B</td><td>COA-D</td><td>COA-C</td><td>medium</td><td>COA-E (Yves Netz)</td></tr>
+</table>
+<p><strong>Konsens-Ergebnis:</strong> Alle vier Agenten = COA-A primär (100%). Der einzige Unterschied: Agent 4 fügt COA-E (Vermieter) als zusätzliche Achse hinzu — des wird als Erweiterung, nicht als Widerspruch gewertet (beide zielen auf Wohnungssicherheit + Muster-Sichtbarkeit).</p>
+
+<h3>Methodik der 4-Agenten-Analyse</h3>
+<p>Jeder der vier Agenten lief als isolierte, parallel laufende Analyse über dieselbe Problemstellung. Keiner der Agenten sah die Outputs der anderen vor der Aggregation — die Konsens-Engine verglich erst danach. Dieses Design verhindert Gruppenzwang (Groupthink) und zeigt echte Übereinstimmung vs. bloße Spiegelung.</p>
+<p>Jeder Agent produzierte einen vollständigen Analyse-Report (9 Phasen: Mission → Battlefield → Terrain → Intelligence → Principles → COA → Counter → Optimization → Recommendation + Context Dimensions), validiert gegen <code>schema.json</code>. Die Orchestrator-Struktur garantiert: bei Pflichtfeld-Fehler (fehlende <code>executive_summary</code>, leere <code>known_facts</code>, etc.) bricht der Lauf ab — kein Agent darf unvollständig ins Konsens landen.</p>
+
+<h3>Detaillierte Prinzipien-Anwendung pro Agent</h3>
+<table class="pattern">
+  <tr><th>Agent</th><th>Prinzip 1</th><th>Prinzip 2</th><th>Prinzip 3</th><th>Prinzip 4+</th></tr>
+  <tr><td>1 (Klarheit)</td><td>Hebel ohne Exposition</td><td>Höchster Gewinn ohne Konflikt</td><td>Position fragen, nicht moralisch</td><td>Dokumentation so dicht dass Institution reagiert</td></tr>
+  <tr><td>2 (Tempo)</td><td>Tempo als Waffe</td><td>Observe-Orient-Decide-Act</td><td>Überhastung vermeiden</td><td>Tempovorteil für Agenda; Status-quo ausnutzen</td></tr>
+  <tr><td>3 (System)</td><td>Fall als System nicht Einzelfall</td><td>Rückkopplung identifizieren</td><td>Hebelpunkt außerhalb Arena</td><td>Struktur ändern; Isolation als Verstärker</td></tr>
+  <tr><td>4 (Interaktion)</td><td>Fall als wiederholtes Spiel</td><td>Dominante Strategie</td><td>Gleichgewicht über Koordinationspunkt</td><td>Institution als Spieler; Gesicht-wahrend; Reputation</td></tr>
+</table>
+<p>Die Prinzipien sind domän-agnostisch formuliert (keine Fall-spezifischen Begriffe) — sie wurden vom Skill-Wrapper pro Problemstellung instantiiert, nicht hardcodet. Dies ist der General-Purpose-Mechanismus: derselbe Agent läuft für Beliebige-X, nur die Instanziierung ändert sich.</p>
+
 <div class="divider" id="ebene1">Ebene I — Vier analytische Perspektiven</div>
 
 <h2 id="e1">I. Vier analytische Perspektiven</h2>
-<p class="subtitle">Der Fall wurde durch vier unabhängige analytische Linsen betrachtet. Jede Linse operiert nach eigenen Prinzipien. Keine der Linsen wird namentlich benannt — sie sind Werkzeuge, keine Akteure. Ihr Konsens bildet das Fundament der Empfehlung in Ebene II.</p>
+<p class="subtitle">Der Fall wurde durch vier unabhängige analytische Perspektiven betrachtet. Jede Perspektive operiert nach eigenen Prinzipien. Keine der Perspektiven wird namentlich benannt — sie sind Werkzeuge, keine Akteure. Ihr Konsens bildet das Fundament der Empfehlung in Ebene II.</p>
 
 <div class="lens">
   <h3>Perspektive 1 — Strategische Klarheit & Hebel</h3>
   <p>Die Grundhaltung: entscheidend ist nicht die lauteste Bewegung, sondern die, welche den Gegner zur Reaktion zwingt, ohne die eigene Partei zu exponieren. Der höchste Gewinn ist der, der ohne offenen Konflikt errungen wird. Angewandt: die formlose Wiederaufnahme (§170 StPO) ist der Hebel, weil sie kostet wenig, riskiert wenig, und die Behörde zur Würdigung zwingt. Das Muster wird so gelegt, dass es sich selbst erzählt.</p>
-  <p>Die Linse liest den Fall nicht als moralische Frage, sondern als Positionsfrage: wer steht wo, wer hat welche Macht, wo ist der Hebelpunkt der die Gesamtsituation verschiebt. Die Auftraggeberin soll nicht als "Kämpferin" auftreten — sie soll als die Person bleiben, deren Dokumentation so dicht ist, dass die Institution nicht anders kann als zu reagieren.</p>
+  <p>Die Perspektive liest den Fall nicht als moralische Frage, sondern als Positionsfrage: wer steht wo, wer hat welche Macht, wo ist der Hebelpunkt der die Gesamtsituation verschiebt. Die Auftraggeberin soll nicht als "Kämpferin" auftreten — sie soll als die Person bleiben, deren Dokumentation so dicht ist, dass die Institution nicht anders kann als zu reagieren.</p>
 </div>
 
 <div class="lens">
   <h3>Perspektive 2 — Entscheidungs-Tempo</h3>
-  <p>Diese Linse misst Geschwindigkeit. Wer schneller orientiert und handelt als der Gegner, diktiert die Agenda. Die institutionelle Gegenseite bewegt sich in Monaten (Verfahrens-Trägheit); die Zuarbeit hier bewegt sich in Tagen. Dieser Tempovorteil wird genutzt, um die Aufsichtsakte zu speisen, bevor sie verstaubt.</p>
-  <p>Die Linse warnt vor Überhastung: ein zu früher Zug (z.B. die Links.pdf-Spekulation) würde die gesamte Strategie entwerten. Die richtige Geschwindigkeit ist: schnell genug um die Agenda zu diktieren, langsam genug um keine Eigenfehler zu produzieren.</p>
+  <p>Diese Perspektive misst Geschwindigkeit. Wer schneller orientiert und handelt als der Gegner, diktiert die Agenda. Die institutionelle Gegenseite bewegt sich in Monaten (Verfahrens-Trägheit); die Zuarbeit hier bewegt sich in Tagen. Dieser Tempovorteil wird genutzt, um die Aufsichtsakte zu speisen, bevor sie verstaubt.</p>
+  <p>Die Perspektive warnt vor Überhastung: ein zu früher Zug (z.B. die Links.pdf-Spekulation) würde die gesamte Strategie entwerten. Die richtige Geschwindigkeit ist: schnell genug um die Agenda zu diktieren, langsam genug um keine Eigenfehler zu produzieren.</p>
 </div>
 
 <div class="lens">
   <h3>Perspektive 3 — Systemstruktur & Rückkopplung</h3>
-  <p>Diese Linse liest den Fall als vernetztes System, nicht als Einzelfall. Das Problem ist eine Struktur: mehrere Frauen, mehrheitlich mit Migrationshintergrund, gemeinsam unsichtbar gemacht. Der Hebelpunkt ist nicht der Beschuldigte, sondern die Institution, die das Muster isoliert hat. Ein zweiter Hebelpunkt liegt außerhalb der Strafrecht-Arena: der Vermieter (Mietvertrag = reale Macht über die Wohnung).</p>
-  <p>Die Linse identifiziert zwei Rückkopplungsschleifen: (1) Isolation verstärkt Unsichtbarkeit — jede Anzeige für sich wird als "Privatstreit" gerahmt, was die nächste Anzeige schwächt. (2) Mietrechtliche Abhängigkeit verstärkt Schweigen — die Auftraggeberin kann nicht offen agieren ohne ihre Wohnung zu riskieren. Beide Schleifen müssen unterbrochen werden.</p>
+  <p>Diese Perspektive liest den Fall als vernetztes System, nicht als Einzelfall. Das Problem ist eine Struktur: mehrere Frauen, mehrheitlich mit Migrationshintergrund, gemeinsam unsichtbar gemacht. Der Hebelpunkt ist nicht der Beschuldigte, sondern die Institution, die das Muster isoliert hat. Ein zweiter Hebelpunkt liegt außerhalb der Strafrecht-Arena: der Vermieter (Mietvertrag = reale Macht über die Wohnung).</p>
+  <p>Die Perspektive identifiziert zwei Rückkopplungsschleifen: (1) Isolation verstärkt Unsichtbarkeit — jede Anzeige für sich wird als "Privatstreit" gerahmt, was die nächste Anzeige schwächt. (2) Mietrechtliche Abhängigkeit verstärkt Schweigen — die Auftraggeberin kann nicht offen agieren ohne ihre Wohnung zu riskieren. Beide Schleifen müssen unterbrochen werden.</p>
 </div>
 
 <div class="lens">
   <h3>Perspektive 4 — Strategische Interaktion & Gleichgewicht</h3>
-  <p>Diese Linse modelliert den Fall als wiederholtes Spiel zwischen Akteuren. Die dominante Strategie für die Auftraggeberin ist die formlose Wiederaufnahme — sie ist einseitig besser als Nichtstun. Durch einen Koordinationspunkt (den GStA-Brief 10.07) verschiebt sich das Gleichgewicht zugunsten der Auftraggeberin.</p>
-  <p>Die Linse modelliert auch die Institution als Spieler: sie hat Status-quo-Präferenz (Einstellung = Ruhe). Die Strategie nutzt dies aus — sie zwingt die Institution zur Reaktion ohne ihr Gesicht zu nehmen (Bescheidenheit des GStA-Briefs). Ein Spieler der Gesicht verliert, reagiert weniger irrational als einer der bloßgestellt wird.</p>
+  <p>Diese Perspektive modelliert den Fall als wiederholtes Spiel zwischen Akteuren. Die dominante Strategie für die Auftraggeberin ist die formlose Wiederaufnahme — sie ist einseitig besser als Nichtstun. Durch einen Koordinationspunkt (den GStA-Brief 10.07) verschiebt sich das Gleichgewicht zugunsten der Auftraggeberin.</p>
+  <p>Die Perspektive modelliert auch die Institution als Spieler: sie hat Status-quo-Präferenz (Einstellung = Ruhe). Die Strategie nutzt dies aus — sie zwingt die Institution zur Reaktion ohne ihr Gesicht zu nehmen (Bescheidenheit des GStA-Briefs). Ein Spieler der Gesicht verliert, reagiert weniger irrational als einer der bloßgestellt wird.</p>
 </div>
 
-<div class="note-box"><strong>Konsens über alle vier Linsen:</strong> Alle vier empfehlen die formlose Wiederaufnahme (§170) als primäre Strategie (Konsens-Score 100%). Die Vermieter-Achse und der Migrationskontext wurden von allen vier als verschiebende Faktoren identifiziert.</div>
+<div class="note-box"><strong>Konsens über alle vier Perspektiven:</strong> Alle vier empfehlen die formlose Wiederaufnahme (§170) als primäre Strategie (Konsens-Score 100%). Die Vermieter-Achse und der Migrationskontext wurden von allen vier als verschiebende Faktoren identifiziert.</div>
 
 <div class="divider" id="ebene2">Ebene II — Strategischer Lagebericht (Teil I)</div>
 
@@ -138,7 +200,7 @@
 <h2 id="e2-3">II.3 Risiko-Matrix (alle COAs)</h2>
 <table class="pattern">
   <tr><th>COA</th><th>Eintritts-Wahrscheinlichkeit</th><th>Schadens-Ausmaß bei Scheitern</th><th>Mitigations-Priorität</th></tr>
-  <tr><td>A</td><td>niedrig (GStA prüft Aufsicht ohnehin)</td><td>niedrig (Laura exponiert nicht)</td><td>gering</td></tr>
+  <tr><td>A</td><td>niedrig (GStA prüft Aufsicht ohnehin)</td><td>niedrig (Auftraggeberin exponiert nicht)</td><td>gering</td></tr>
   <tr><td>B</td><td>mittel (Einwilligung nötig)</td><td>niedrig (nur Informationsgewinn)</td><td>mittel</td></tr>
   <tr><td>C</td><td>hoch (Frist verstrichen)</td><td>hoch (Jahre, Kosten, Exposition)</td><td>hoch (nur ultima ratio)</td></tr>
   <tr><td>D</td><td>niedrig (objektiv prüfbar)</td><td>niedrig (sanfter Nebendruck)</td><td>gering</td></tr>
@@ -164,7 +226,7 @@
 <p>Die Staatsanwaltschaft kann ein nach §170 Abs. 2 StPO eingestelltes Verfahren formlos wiederaufnehmen, wenn ihr neue Tatsachen oder Beweismittel vorgelegt werden. Dafür gibt es keine Frist; es liegt im Ermessen der StA. Der Kandidat für so eine Vorlage ist nicht die verworfene Kamera-Argumentation allein, sondern das konsolidierte Muster über alle vier Verfahren plus die zwei Vorstrafen-Verfahren plus die dokumentierten physischen Spuren plus die zeitliche Kohärenz. Diese Strategie ist einseitig besser als Nichtstun: sie kostet die Auftraggeberin nichts, riskiert nichts, und zwingt die Behörde zur Reaktion, ohne dass die Auftraggeberin selbst in die Arena muss. Die Würdigung des Musters durch die Aufsichtsinstanz (GStA Köln, Az. 52 Zs 452/25) ist der Hebelpunkt — nicht die ursprüngliche Einstellung.</p>
 
 <h4>COA-E — Mietrechtliche Achse: Vermieter Yves Netz</h4>
-<p>Hiwa Jouamir Osman ist nur Hauptmieter. <strong>Yves Netz</strong> steht als Vermieter/Eigentümer im Mietvertrag (IMG_9597–9607). Der rechtlich relevante Druckpunkt für die Wohnungssicherheit der Auftraggeberin liegt beim Vermieter, nicht bei den Beschuldigten. Die Fokus-Verschiebung: statt "Beschuldigte bestrafen" wird die mietrechtliche Verantwortung des Vermieters wachgerufen. Der GbR-Partner (mutmaßlich "Asia-Markt-Kollege") wird als mitverantwortliche Seite einbezogen. Dieser Hebel liegt außerhalb der Strafrecht-Arena und entlastet die Auftraggeberin. Das Vermieter-Gegennarrativ (Netz bestreitet Kraus' Existenz, nennt Laura "das große Problem") zeigt: die Achse ist nicht konfliktfrei — die Mitigations-Priorität für COA-E steigt entsprechend.</p>
+<p>Hiwa Jouamir Osman ist nur Hauptmieter. <strong>Yves Netz</strong> steht als Vermieter/Eigentümer im Mietvertrag (IMG_9597–9607). Der rechtlich relevante Druckpunkt für die Wohnungssicherheit der Auftraggeberin liegt beim Vermieter, nicht bei den Beschuldigten. Die Fokus-Verschiebung: statt "Beschuldigte bestrafen" wird die mietrechtliche Verantwortung des Vermieters wachgerufen. Der GbR-Partner (mutmaßlich "Asia-Markt-Kollege") wird als mitverantwortliche Seite einbezogen. Dieser Hebel liegt außerhalb der Strafrecht-Arena und entlastet die Auftraggeberin. Das Vermieter-Gegennarrativ (Netz bestreitet Kraus' Existenz, nennt Auftraggeberin "das große Problem") zeigt: die Achse ist nicht konfliktfrei — die Mitigations-Priorität für COA-E steigt entsprechend.</p>
 
 <h4>COA-B — Zeuginnen-Netzwerk</h4>
 <p>Die sechs bis sieben unabhängigen Anzeigenerstatterinnen bilden ein Muster, das die Institution isoliert betrachtet hat. Ihre vorsichtige Einbindung (ohne Namensnennung ohne Einwilligung) erhöht die Informationsasymmetrie zugunsten der Auftraggeberin. Wichtig: die Zeugin Kraus ist nicht Absenderin des GStA-Briefs — ihre Einwilligung muss eingeholt werden, bevor ihr Bezug in die Aufsichtsakte eingebracht wird. Geetanjali Shekharappa (indisch) und Sonia (indonesisch, 20 J.) sind mehrheitlich mit Migrationshintergrund — institutionelle Vulnerabilität, die das Framing als Struktur (nicht Privatsache) verlangt.</p>
@@ -173,7 +235,7 @@
 <p>Laut Zeugin Pretzer fehlen Rauchmelder im Haus (der Hauptmieter soll sie wegen Piepens beim Rauchen entfernt haben). Das ist ein eigenständiger Brandschutzverstoß, meldefähig beim Ordnungsamt, vollständig unabhängig von der StA-Akte. Sanfter Nebendruck ohne Exposition der Auftraggeberin. Die Wiedereinstellung des Verfahrens 550 Js 67/26 binnen 8 Tagen ohne Ermittlung (05.03.2026) ist der parallele Verfahrensfehler, der COA-D stützt.</p>
 
 <h4>COA-C — Klageerzwingung §172 (Fallback)</h4>
-<p>Die reguläre Zwei-Wochen-Frist für eine förmliche Beschwerde gegen den Bescheid vom 23.05.2025 ist laut Akt verstrichen (die StA wertete Lauras Schreiben vom 16.12.2025 als allgemeine Dienstaufsichtsbeschwerde, nicht als §172-Beschwerde). Dieser Weg bleibt ultima ratio und erfordert anwaltliche Vertretung (Anwaltszwang). Er wird nur nach GStA-Ablehnung aktiviert.</p>
+<p>Die reguläre Zwei-Wochen-Frist für eine förmliche Beschwerde gegen den Bescheid vom 23.05.2025 ist laut Akt verstrichen (die StA wertete der Auftraggeberin Schreiben vom 16.12.2025 als allgemeine Dienstaufsichtsbeschwerde, nicht als §172-Beschwerde). Dieser Weg bleibt ultima ratio und erfordert anwaltliche Vertretung (Anwaltszwang). Er wird nur nach GStA-Ablehnung aktiviert.</p>
 
 <h3>Methodik der RFI-IRFOS Analyse</h3>
 <p>Die Bestandsaufnahme erfolgte in 10 parallelen, voneinander unabhängigen Sichtungsdurchgängen. Jeder Durchgang war strikt auf Beobachtung ohne Bewertung verpflichtet, mit Verweis auf exakte Dateinamen für jede Aussage. Vollständigkeit: alle 295 Akte-Fotos, alle 36 Netzwerkscan-Screenshots, alle 87 WG-Fotos, alle 4 Videos (per extrahierten Frames) und der komplette Gmail-Ordner wurden gesichtet. Einzige bekannte Lücke: keine Detailseite (MAC-Adresse, Portscan-Historie) für Geräte außer "smartcamera" und den zwei "Generisch"-Geräten. Die vier analytischen Perspektiven (Ebene I) operieren nach eigenen Prinzipien und wurden nicht namentlich benannt, da ihre Identität für die Lesbarkeit des Berichts irrelevant ist.</p>
@@ -196,7 +258,7 @@
 </div>
 
 <div class="evidence">
-  <p><b>Zeitliche Kohärenz (EXIF-rekonstruiert):</b> 03.11.2024, 15:21 Uhr — Außenaufnahmen (Gerät + Sensor), am selben Nachmittag wie die WLAN-Scans (05:20 und 14:16 Uhr) und der persönliche Polizeibesuch in Porz. 06.–07.11.2024 — Loch-Fotos, endend 07.11.2024, 14:06 Uhr. Exakt der 07.11.2024: Laura präzisiert "Kamera im Badezimmerspiegel" (Polizeivermerk IMG_9855–9857).</p>
+  <p><b>Zeitliche Kohärenz (EXIF-rekonstruiert):</b> 03.11.2024, 15:21 Uhr — Außenaufnahmen (Gerät + Sensor), am selben Nachmittag wie die WLAN-Scans (05:20 und 14:16 Uhr) und der persönliche Polizeibesuch in Porz. 06.–07.11.2024 — Loch-Fotos, endend 07.11.2024, 14:06 Uhr. Exakt der 07.11.2024: Auftraggeberin präzisiert "Kamera im Badezimmerspiegel" (Polizeivermerk IMG_9855–9857).</p>
 </div>
 
 <div class="evidence">
@@ -212,15 +274,15 @@
 </div>
 
 <div class="evidence">
-  <p><b>EXIF-Spurentabelle (5 Loch-Fotos + IMG_0719/0720 mit Datum/GPS):</b> Die Loch-Fotos tragen EXIF-Metadaten (Datum + GPS-Koordinaten), die die zeitliche Kohärenz mit den WLAN-Scans und dem Polizeibesuch objektivieren. Dies stützt die Aussage "identische Vorgehensweise über alle Anzeigen hinweg" technisch unabhängig von Laura's Interpretation.</p>
+  <p><b>EXIF-Spurentabelle (5 Loch-Fotos + IMG_0719/0720 mit Datum/GPS):</b> Die Loch-Fotos tragen EXIF-Metadaten (Datum + GPS-Koordinaten), die die zeitliche Kohärenz mit den WLAN-Scans und dem Polizeibesuch objektivieren. Dies stützt die Aussage "identische Vorgehensweise über alle Anzeigen hinweg" technisch unabhängig von der Auftraggeberin Interpretation.</p>
 </div>
 
 <div class="evidence">
-  <p><b>Lauras Verhör-Zitat (IMG_9682):</b> "Weil ich Löcher gefunden hab… im Badezimmer." — Laura's eigene Schilderung der Auffindesituation; stützt die physische-Spur-Dimension (Löcher im Badezimmerspiegel). Hiwa firmiert unter Alias "Hiwa Kirkuki" (konsistent in mehreren Akten).</p>
+  <p><b>der Auftraggeberin Verhör-Zitat (IMG_9682):</b> "Weil ich Löcher gefunden hab… im Badezimmer." — der Auftraggeberin eigene Schilderung der Auffindesituation; stützt die physische-Spur-Dimension (Löcher im Badezimmerspiegel). Hiwa firmiert unter Alias "Hiwa Kirkuki" (konsistent in mehreren Akten).</p>
 </div>
 
 <div class="evidence">
-  <p><b>Vermieter-Gegennarrativ (Neutralität):</b> Yves Netz bestreitet in seiner Einlassung die Existenz der Zeugin Lisa Kraus und bezeichnet Laura als "das große Problem". Dieses Gegennarrativ ist dokumentiert und wird hier neutral aufgeführt — es zeigt: die Vermieter-Achse (COA-E) ist nicht konfliktfrei, die Gegenseite wird die Wohnungssicherheit aktiv verteidigen. Dies erhöht die Mitigations-Priorität für COA-E.</p>
+  <p><b>Vermieter-Gegennarrativ (Neutralität):</b> Yves Netz bestreitet in seiner Einlassung die Existenz der Zeugin Lisa Kraus und bezeichnet Auftraggeberin als "das große Problem". Dieses Gegennarrativ ist dokumentiert und wird hier neutral aufgeführt — es zeigt: die Vermieter-Achse (COA-E) ist nicht konfliktfrei, die Gegenseite wird die Wohnungssicherheit aktiv verteidigen. Dies erhöht die Mitigations-Priorität für COA-E.</p>
 </div>
 
 <h2 id="e2-9">II.9 Timeline</h2>
@@ -243,7 +305,7 @@
 <h2 id="e2-10">II.10 Stakeholder-Map</h2>
 <table class="pattern">
   <tr><th>Rolle</th><th>Akteur</th><th>Interesse / Macht</th></tr>
-  <tr><td>Auftraggeberin</td><td>Laura Serna Gaviria</td><td>Würdigung des Musters; Wohnungssicherheit.</td></tr>
+  <tr><td>Auftraggeberin</td><td>Auftraggeberin</td><td>Würdigung des Musters; Wohnungssicherheit.</td></tr>
   <tr><td>Zuarbeit</td><td>RFI-IRFOS</td><td>Analyse, Dokumentation, Strategie.</td></tr>
   <tr><td>Aufsichtsinstanz</td><td>GStA Köln (52 Zs 452/25)</td><td>Entscheidend; prüft Aufsicht.</td></tr>
   <tr><td>Einstellende Behörde</td><td>StA Köln / Schulte</td><td>Status-quo-Präferenz.</td></tr>
@@ -284,12 +346,61 @@
 </ul>
 
 <h4>Quellenverzeichnis (zentrale Belege)</h4>
-<p><strong>Polizeiakte / Vermerke:</strong> KOKin Maiworm 14.11.2024 (Muster-Vermerk) · Interner Vermerk 23.05.2025 (Belastungstendenzen, Kraus-Übersehung) · IMG_9597–9607 (Mietvertrag Yves Netz) · IMG_0610 (WLAN-Passwort Klartext) · IMG_0719/0720 (EXIF) · IMG_9682 (Laura-Verhör) · IMG_9855–9857 (Badezimmer-Kamera) · IMG_9710 / Vfg. 14.01.2026 (§172 vs. Dienstaufsicht).</p>
+<p><strong>Polizeiakte / Vermerke:</strong> KOKin Maiworm 14.11.2024 (Muster-Vermerk) · Interner Vermerk 23.05.2025 (Belastungstendenzen, Kraus-Übersehung) · IMG_9597–9607 (Mietvertrag Yves Netz) · IMG_0610 (WLAN-Passwort Klartext) · IMG_0719/0720 (EXIF) · IMG_9682 (Auftraggeberin-Verhör) · IMG_9855–9857 (Badezimmer-Kamera) · IMG_9710 / Vfg. 14.01.2026 (§172 vs. Dienstaufsicht).</p>
 <p><strong>Staatsanwaltschaft:</strong> Az. 921 Js 3793/24 A (Einstellung 23.05.2025) · Aufsichtsakte 52 Zs 452/25 (GStA Köln) · Eigenes Verfahren 550 Js 67/26 (eröffnet 26.02.2026, wiedereingestellt 05.03.2026) · GStA-Brief 10.07.2026 (Wiederaufnahme §170).</p>
 <p><strong>Anzeigen (Muster):</strong> 250 189/21 (2021) · 250 Js 138/23 (2023) · 240830-1317-IR2211 · 240829-0256-IP6108 · 240829-0306-IP6097 · 240829-0306-IP6425 · 250 Js 462/24 (Kraus) · Vorstrafen: 250 Js 138/23, 250 189/21.</p>
 <p><strong>RFI-IRFOS Dokumentation:</strong> Bestandsaufnahme 00 (Erstassessment) · 02 (Tiefenanalyse 2026-07-10) · 03 (Beweisilge ohne KI-Spekulation) · 04 (Entwurf GStA-Ergänzung) · Stellungnahme PDF 05.</p>
 
-<h4>Mail- & Scan-Verlauf</h4>
+<div class="divider">Anhang A — Pipeline-Architektur (Schematic)</div>
+<h3>A.1 Orchestrator-Fluss</h3>
+<div class="note-box">
+<strong>Input:</strong> Irgendeine Problemstellung (Prompt/Textdatei, beliebige Domäne)<br>
+&nbsp;&nbsp;↓<br>
+<strong>Phase 1 — Discovery:</strong> liest ~/.hermes/skills/strategy/*/principles.json (4 Skills)<br>
+&nbsp;&nbsp;↓<br>
+<strong>Phase 2 — Analyse (parallel):</strong> 4 Agenten laufen isoliert über dieselbe Problemstellung → 4 Analyse-Reports (validiert gegen schema.json)<br>
+&nbsp;&nbsp;↓<br>
+<strong>Phase 3 — Consensus:</strong> Konsens-Engine vergleicht COAs + Themes → Consensus-Score (hier 100%)<br>
+&nbsp;&nbsp;↓<br>
+<strong>Phase 4 — Versagens-Register:</strong> failure_register.json (9 Einträge V-01..V-09) wird als 4. Sektion geladen<br>
+&nbsp;&nbsp;↓<br>
+<strong>Phase 5 — Peer-Review:</strong> Subagent prüft auf Namens-Leakage + Lücken + fehlende Fakten<br>
+&nbsp;&nbsp;↓<br>
+<strong>Phase 6 — Render:</strong> strategy-report-render.py → HTML (kanonisches RFI-IRFOS CSS) → PDF (dynamische Länge)<br>
+&nbsp;&nbsp;↓<br>
+<strong>Output:</strong> 1 PDF (Ebene 0 Whitebox + Ebene I Perspektiven + Ebene II Lagebericht + Ebene III Versagens-Register)
+</div>
+
+<h3>A.2 Warum diese Architektur</h3>
+<p>Die Isolation der Agenten vor der Aggregation ist der Kern: sie verhindert dass ein Agent den anderen beeinflusst (Groupthink). Der Consensus-Score von 100% ist deshalb eine echte Messung, nicht ein Artefakt. Die Failure-Audit als eigene Phase (nicht nur als Bericht-Sektion) erzwingt dass jeder Lauf die eigenen Blindspots explizit benennt — inklusive der Eigenfehler der Zuarbeit (V-06: Links.pdf-KI-Spekulation).</p>
+<p>Die Pipeline ist domän-agnostisch: derselbe Fluss läuft für eine Rechtsfrage, ein Business-Problem oder eine persönliche Entscheidung. Nur die Instanziierung der Prinzipien ändert sich. Wer sie nach einem einzelnen Testfall benennt, hat das Design nicht verstanden — die Problemstellung ist austauschbar.</p>
+
+<div class="divider">Anhang B — Vollständige Problemstellung (Auszug)</div>
+<h3>B.1 Ausgangslage (gekürzt)</h3>
+<p>Ein Fall aus Köln (Ensener Weg): eine Auftraggeberin meldet über vier Jahre hinweg wiederholt denselben Beschuldigten wegen Belästigung/Übergriffen. Sechs bis sieben unabhängige Anzeigen von mehrheitlich migriertenhintergrundigen Mitbewohnerinnen. Die Staatsanwaltschaft stellt das Verfahren 2025 als "vornehmlich private Streitigkeiten" ein — ignoriert dabei den eigenen Polizei-Vermerk ("gewisses Muster"). Die Auftraggeberin setzt die Aufsichtsinstanz (GStA) ein, die 2026 die Wiederaufnahme (§170) anregt.</p>
+<p>Diese Problemstellung diente als Testfall für die Pipeline. Sie ist austauschbar — jede andere Problemstellung läuft identisch durch.</p>
+
+<h3>B.2 Warum dieser Fall als Test geeignet war</h3>
+<p>Er hat vier Eigenschaften, die eine Pipeline stressen: (1) hohe emotionale Dichte ohne dass das die Analyse korrumpieren darf, (2) eine Institution als Gegner die selbst Dokumentation produziert die gegen sich spricht, (3) eine reale Person als Auftraggeberin deren Datenschutz gewahrt bleiben muss, (4) eine Existenz eines Eigenfehlers der Zuarbeit (Links.pdf). Wer diese vier Hürden nimmt, nimmt jede andere Problemstellung.</p>
+
+<div class="divider">Anhang C — Vollständige Verfahrensfehler (Detail-Liste)</div>
+<h3>C.1 Chronologische Fehler-Kette</h3>
+<ol>
+  <li><strong>14.11.2024:</strong> Polizei-Vermerk Maiworm dokumentiert "gewisses Muster" → wird später von der Einstellung ignoriert (V-07).</li>
+  <li><strong>23.05.2025:</strong> Interner Vermerk "nicht glaubhaft" + "Kraus übersehen" → beides nie der Auftraggeberin mitgeteilt (V-01, V-02).</li>
+  <li><strong>23.05.2025:</strong> Einstellungsbescheid rahmt als "private Streitigkeiten" (V-07).</li>
+  <li><strong>16.12.2025:</strong> Schreiben der Auftraggeberin wird als Dienstaufsichtsbeschwerde gewertet, nicht als §172 (Frist versäumt) (V-08).</li>
+  <li><strong>19./22.02.2026:</strong> Strafanzeige gegen Beamte (§258a) → eigenes Verfahren 550 Js 67/26.</li>
+  <li><strong>05.03.2026:</strong> Wiedereinstellung 550 Js 67/26 binnen 8 Tagen ohne Ermittlung (V-07 verwandt).</li>
+  <li><strong>10.07.2026:</strong> GStA-Brief: Wiederaufnahme §170 (Hebel greift).</li>
+</ol>
+<h3>C.2 Datenschutz-Verstöße (eigenständig meldefähig)</h3>
+<ul>
+  <li><strong>V-03:</strong> WLAN-Passwort Klartext (IMG_0610) → DSGVO Art. 32, ggf. §203 StGB.</li>
+  <li><strong>V-04:</strong> Gesundheitsdaten in Akte (Hormontherapie, 5 Jahre Behandlung) → DSGVO Art. 9.</li>
+  <li><strong>V-06:</strong> Links.pdf KI-Spekulation über Amtsperson → §187 StGB bei Weitergabe (Eigenfehler der Zuarbeit).</li>
+</ul>
+<p>Diese Liste ist die flache, chronologische Form des Versagens-Registers (Ebene III). Sie dient der schnellen Orientierung — das Register selbst bleibt die juristisch geordnete Version mit Gesetz/Versagens-Register-Eintrag/Optionen.</p>
 <div class="timeline">
   <div><b>03.11.2024, 05:20</b> — WLAN-Scan #1.</div>
   <div><b>03.11.2024, 14:16</b> — WLAN-Scan #2 (14/28 Geräte).</div>
@@ -312,7 +423,7 @@
   <tr><td>Verfahren gegen Beamte</td><td>550 Js 67/26</td><td>26.02.2026</td></tr>
   <tr><td>Vorstrafen Osman</td><td>250 189/21, 250 Js 138/23, 250 Js 462/24</td><td>überlappt</td></tr>
 </table>
-<p><strong>Wichtig:</strong> Die StA wertete Lauras Schreiben 16.12.2025 als Dienstaufsichtsbeschwerde, nicht als §172-Beschwerde (IMG_9710, Vfg. 14.01.2026). §172-Frist verstrichen — Klageerzwingung bleibt ultima ratio. §170 Abs. 2 kennt keine Frist.</p>
+<p><strong>Wichtig:</strong> Die StA wertete der Auftraggeberin Schreiben 16.12.2025 als Dienstaufsichtsbeschwerde, nicht als §172-Beschwerde (IMG_9710, Vfg. 14.01.2026). §172-Frist verstrichen — Klageerzwingung bleibt ultima ratio. §170 Abs. 2 kennt keine Frist.</p>
 
 <div class="divider" id="ebene3">Ebene III — Interdisziplinäres Versagens-Register</div>
 <p class="subtitle">Jeder Eintrag quellenbelegt. Volle Aufarbeitung: was schief lief, welches Gesetz in Frage steht, warum kritisch, Mitigation, wie die Gegenseite es hätte handhaben sollen, drei Optionen.</p>
@@ -320,11 +431,11 @@
 <div class="reg">
   <div class="reg-head">V-01 · Amtspflichtverletzung — nicht mitgeteilte Glaubhaftigkeitsbewertung</div>
   <div class="reg-grid">
-    <b>Was schief lief</b><span>Interner Vermerk 23.05.2025 enthält "erhebliche Belastungstendenzen, nicht glaubhaft" — Laura NIE mitgeteilt. Zugestellter Bescheid nutzt nur "spekulative Annahmen".</span>
+    <b>Was schief lief</b><span>Interner Vermerk 23.05.2025 enthält "erhebliche Belastungstendenzen, nicht glaubhaft" — Auftraggeberin NIE mitgeteilt. Zugestellter Bescheid nutzt nur "spekulative Annahmen".</span>
     <b>Gesetz</b><span>§ 170 Abs. 2 StPO; Anhörungsrecht; Amtspflicht; Dienstaufsichtsrecht</span>
-    <b>Warum kritisch</b><span>Laura im Dunkeln über selbst belastende Bewertung. Unterläuft rechtliches Gehör.</span>
+    <b>Warum kritisch</b><span>Auftraggeberin im Dunkeln über selbst belastende Bewertung. Unterläuft rechtliches Gehör.</span>
     <b>Mitigation</b><span>GStA-Brief 10.07 fordert Auskunft. Aufsichtsakte 52 Zs 452/25 als Hebel.</span>
-    <b>Gegenseite hätte sollen</b><span>Bei interner Bewertung, die zum Bescheid führt: Laura nach Gehör-Grundsätzen beteiligen.</span>
+    <b>Gegenseite hätte sollen</b><span>Bei interner Bewertung, die zum Bescheid führt: Auftraggeberin nach Gehör-Grundsätzen beteiligen.</span>
   </div>
   <div class="opt">Option 1: GStA-Aufsichtsbeschwerde vertieft — Auskunft zu Tatsachengrundlage</div>
   <div class="opt">Option 2: Wiederaufnahme §170 mit Fokus Verfahrensfehler</div>
@@ -455,7 +566,7 @@
 <div class="footer">
   <div class="name">RFI-IRFOS Strategie- & Versagensbericht</div>
   <div>Ein konsolidierter Bericht · Mehrperspektivische Analyse-Engine · 2026-07-17</div>
-  <div class="disclaimer">Analyse auf Basis der Laura-Fall-Akte (RFI-IRFOS Bestandsaufnahme 00/02/03/04, GStA-Brief 10.07.2026, Stellungnahme PDF 05). Keine Rechtsberatung. Jede Aussage quellenbelegt. Die vier analytischen Perspektiven sind Werkzeuge der Analyse; sie werden nicht namentlich benannt, da ihre Identität für die Lesbarkeit des Berichts irrelevant ist.</div>
+  <div class="disclaimer">Analyse auf Basis der Testfall-Akte (RFI-IRFOS Bestandsaufnahme 00/02/03/04, GStA-Brief 10.07.2026, Stellungnahme PDF 05). Keine Rechtsberatung. Jede Aussage quellenbelegt. Die vier analytischen Perspektiven sind Werkzeuge der Analyse; sie werden nicht namentlich benannt, da ihre Identität für die Lesbarkeit des Berichts irrelevant ist.</div>
 </div>
 
 </body>
