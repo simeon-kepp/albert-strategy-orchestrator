@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Call The SWAT
+Comment=RFI-IRFOS Strategy-Pipeline (vollautomatisch)
+Icon=utilities-terminal
+Exec=gnome-terminal -- bash /home/eri-irfos/Desktop/call_the_swat.sh
+Terminal=true
+Categories=Utility;Development;
