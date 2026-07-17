@@ -1,0 +1,48 @@
+{
+  "entities": {
+    "Sonia Magdalena Simanulang": {
+      "rolle": "Mitbewohnerin",
+      "anzeigebereit": false,
+      "anzahl_anzeigen": 0,
+      "quelle": "02_TIEFENANALYSE §6 Z.92 (IMG_9572-9578, 9606)",
+      "notiz": "Nicht anzeigebereit ('weil sie aus Indonesien stammt und erst 20 Jahre alt ist')"
+    },
+    "Lisa Kraus": {
+      "rolle": "5. Mitbewohnerin (Okt-Dez 2023)",
+      "anzeigebereit": true,
+      "anzahl_anzeigen": 1,
+      "verfahren": "Az. 250 Js 462/24",
+      "quelle": "02_TIEFENANALYSE §6 Z.90 (IMG_9576, 9835-9861)"
+    },
+    "Geetanjali Shekharappa Gurlhosur": {
+      "rolle": "Mitbewohnerin",
+      "anzeigebereit": true,
+      "anzahl_anzeigen": 1,
+      "quelle": "Strafantragsformular 05.11.2024",
+      "notiz": "Behält Strafantrag vor, stellt ihn ausdrücklich nicht"
+    },
+    "Katrin Pretzer": {
+      "rolle": "Mitbewohnerin / Zeugin",
+      "anzeigebereit": true,
+      "anzahl_anzeigen": 1,
+      "quelle": "03_BEWEISLAGE Z.48 (2024 vier gleichzeitig: Pretzer, Gurlhosur, Serna Gaviria, Kraus)"
+    },
+    "Laura Serna Gaviria": {
+      "rolle": "Auftraggeberin / Hauptanzeigenerstatterin",
+      "anzeigebereit": true,
+      "anzahl_anzeigen": 1,
+      "verfahren": "Az. 921 Js 3793/24 A",
+      "quelle": "Einstellungsbescheid 23.05.2025"
+    },
+    "Yves Netz": {
+      "rolle": "Vermieter / Eigentümer (Netz Minokovic GbR)",
+      "anzeigebereit": false,
+      "quelle": "02_TIEFENANALYSE §6 Z.91 (IMG_9597-9607)"
+    }
+  },
+  "hard_rules": [
+    "KEINE Person darf als 'Anzeige gegen X' deklariert werden ohne entity.anzeigebereit == true in facts.json",
+    "Jede Personen-Behauptung im Report muss entity.quelle referenzieren",
+    "Personen mit anzeigebereit == false werden NUR als Mitbewohner/Mitwisser beschrieben, nie als Anzeigenerstatter"
+  ]
+}
