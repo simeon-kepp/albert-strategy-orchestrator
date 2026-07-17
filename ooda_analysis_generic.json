@@ -1,0 +1,391 @@
+{
+  "skill_id": "Perspektive 2",
+  "framework_version": "1.0.0",
+  "mission": {
+    "objective": "Neubewertung über Muster statt Einzelfall — ohne direkten Konflikt, bei adaptivem Gegner (Beschuldigtenseite + Beh.).",
+    "end_state": "GStA würdigt Gesamtschau; Auftraggeberin geschützt; wir zyklen schneller als der Gegner reagieren kann.",
+    "success_criteria": [
+      "sachliche GStA-Reaktion",
+      "Muster gewürdigt",
+      "kein Repressal",
+      "Gegner bleibt in Reaktion"
+    ],
+    "failure_criteria": [
+      "pauschale Abweisung",
+      "Auftraggeberin in Konflikt",
+      "Gegner operiert in unserem Loop"
+    ],
+    "constraints": [
+      "keine Rechtsvertretung",
+      "Frist weg",
+      "Kamera-Arg verworfen",
+      "Links.pdf raus",
+      "DS redigieren"
+    ],
+    "unknowns": [
+      "GStA-Reaktion",
+      "Kraus-Foto da?",
+      "Beschuldigte reagieren?",
+      "neü Zeuginnen?"
+    ]
+  },
+  "analysis": {
+    "phase1_mission_definition": {
+      "objective": "Loop-Geschwindigkeit gegenüber adaptiven Gegner maximieren.",
+      "end_state": "GStA reagiert auf unsere Zyklen, nicht umgekehrt."
+    },
+    "phase2_battlefield_mapping": {
+      "observe_sources": [
+        "vollständige Akte",
+        "EXIF-Zeitachse",
+        "RFI-IRFOS Stellungnahme",
+        "GStA-Brief 10.07",
+        "Yves Netz (Vermieter, Netz Minokovic GbR) — Hiwa nur Hauptmieter; Mietvertrag = relevante Achse"
+      ],
+      "opponent_loop": "Beschuldigte + StA reagieren langsam (behördliche Trägheit, Monate).",
+      "our_loop": "RFI-IRFOS kann in Tagen zyklen (Analyse -> Brief -> Nachsteürung)."
+    },
+    "phase3_terrain_analysis": {
+      "loop_gap": "Unser Loop (Tage) << Gegner-Loop (Monate) -> wir können mehrmals zyklen bevor Gegner kontert.",
+      "disorient_hook": "Bescheidenheits-Framing + Fokus-Wechsel (Kamera->Muster) bricht Gegners Erwartungs-Modell.",
+      "leverage_point": "Mietrechtliche Achse: Yves Netz im Mietvertrag ist der rechtlich relevante Druckpunkt, nicht die Beschuldigten"
+    },
+    "phase4_intelligence_assessment": {
+      "known_facts": [
+        "Einstellung 23.05.2025",
+        "Muster-Vermerk Maiworm",
+        "Verfahrensfehler dokumentiert",
+        "Aufsichtsakte offen"
+      ],
+      "assumptions": [
+        "GStA bearbeitet noch",
+        "Kraus-Foto existiert",
+        "Gesamtschau ändert Bewertung"
+      ],
+      "unknowns": [
+        "GStA-Reaktion",
+        "neü Zeuginnen"
+      ],
+      "missing_intelligence": [
+        "Kraus-Foto",
+        "Status Aufsichtsakte"
+      ],
+      "confidence_per_conclusion": {
+        "Muster existiert": "high",
+        "Kamera": "low",
+        "GStA neu bewertet": "medium"
+      }
+    },
+    "phase5_strategic_principles": {
+      "applied": [
+        {
+          "id": "observe",
+          "use": "Vollständige Akte + EXIF = breite, unvoreingenommene Beobachtungsbasis."
+        },
+        {
+          "id": "orient",
+          "use": "Mentale Modelle: Behörde will Gesicht wahren -> Framing 'neü Gesamtschau' nicht 'Fehler'."
+        },
+        {
+          "id": "decide",
+          "use": "Schnelle Wahl: Aufsichtsweg (COA-A), kein jahrelanger Prozess."
+        },
+        {
+          "id": "act",
+          "use": "Brief 10.07 gesendet -> erzeugt neü Beobachtung (GStA-Reaktion)."
+        },
+        {
+          "id": "operate_inside_loop",
+          "use": "Wir zyklen (Tage) schneller als Beschuldigte/StA (Monate) -> zwingen sie in Reaktion."
+        },
+        {
+          "id": "disorient",
+          "use": "Fokus-Wechsel Kamera->Muster + Links.pdf-Zurückhaltung bricht Gegners Erwartungs-Modell."
+        }
+      ]
+    },
+    "phase6_courses_of_action": [
+      {
+        "id": "COA-A",
+        "name": "Schneller Aufsichts-Zyklus",
+        "risk": "low",
+        "chance_of_success": "medium",
+        "time_horizon": "Wochen-Monate"
+      },
+      {
+        "id": "COA-B",
+        "name": "Zeuginnen-Reaktivierung (Loop verstärken)",
+        "risk": "medium",
+        "chance_of_success": "medium",
+        "time_horizon": "Monate"
+      },
+      {
+        "id": "COA-C",
+        "name": "Anwaltlicher Zwang (langsamer Loop)",
+        "risk": "high",
+        "chance_of_success": "low",
+        "time_horizon": "Jahre"
+      },
+      {
+        "id": "COA-D",
+        "name": "Nebenfront Ordnungsamt",
+        "risk": "low",
+        "chance_of_success": "medium",
+        "time_horizon": "Wochen"
+      },
+      {
+        "id": "COA-E",
+        "name": "Mietrechtliche Achse über Vermieter Yves Netz",
+        "risk": "medium",
+        "time_horizon": "Monate",
+        "rationale": "Hiwa nur Hauptmieter; Yves Netz (Mietvertrag) = relevante Achse",
+        "chance_of_success": "medium"
+      }
+    ],
+    "phase7_counter_strategy": {
+      "opponent_loop_speed": "langsam (Monate)",
+      "predicted_response": "Bestreiten, Glaubwürdigkeitsangriff (interner Vermerk) -> aber erst nach Monaten.",
+      "our_advantage": "Wir haben dann schon nachgesteürt (2-3 Loops) bevor Gegner kontert.",
+      "worst_move": "Links.pdf einbringen -> desorientiert UNS (Glaubwürdigkeitsverlust)."
+    },
+    "phase8_optimization": {
+      "reduce": [
+        "Decision-Latency",
+        "Gegner-Reaktionszeit"
+      ],
+      "increase": [
+        "Loop-Speed",
+        "Disorientierung"
+      ]
+    },
+    "phase9_final_recommendation": {
+      "executive_summary": "Loop-Geschwindigkeit als Waffe: wir zyklen Tage, Gegner Monate. Aufsichtsweg + Bescheidenheit + Fokus-Muster zwingt Beh. in Reaktion.",
+      "recommended_strategy": "COA-A primär (schneller Zyklus), B parallel, D Option, C nur Fallback.",
+      "reasoning": "operate_inside_loop: unsere Zykluszeit << Gegner. disorient: Fokus-Wechsel + Links.pdf-Zurückhaltung.",
+      "implementation_steps": [
+        "1. GStA-Reaktion abwarten (Beobachtung).",
+        "2. Orient: passt Framing? Nachsteürn.",
+        "3. Zeuginnen parallel reaktivieren (Loop verstärken).",
+        "4. Bei Stille: freundliche Nachfrage (neür Act-Zyklus).",
+        "5. DS-Redigung vor Weitergabe."
+      ],
+      "decision_points": [
+        "GStA reagiert?",
+        "Gegner kontert schneller als erwartet?"
+      ],
+      "warning_signs": [
+        "Links.pdf bekannt",
+        "Gegner zykelt überraschend schnell"
+      ],
+      "fallback_plans": [
+        "COA-C anwaltlich",
+        "COA-D Ordnungsamt"
+      ],
+      "strategic_principles_applied": [
+        "observe",
+        "orient",
+        "decide",
+        "act",
+        "operate_inside_loop",
+        "disorient"
+      ],
+      "confidence_assessment": {
+        "level": "medium",
+        "basis": "Loop-Gap real (Tage vs Monate); GStA-Reaktion unbekannt."
+      },
+      "detailed_strategies": [
+        {
+          "coa_id": "COA-A",
+          "title": "Schneller Aufsichts-Zyklus (Loop-Geschwindigkeit)",
+          "narrative": "RFI-IRFOS zykelt in Tagen, Beschuldigte/StA in Monaten. Wir erzeugen neue Beobachtungen (Brief -> GStA-Reaktion -> Nachsteuerung) schneller als der Gegner kontern kann. Operate inside opponent's loop.",
+          "actions": [
+            "Brief 10.07 gesendet (Act).",
+            "GStA-Reaktion beobachten (Observe).",
+            "Bei Stille: Nachfrage = neuer Zyklus."
+          ],
+          "expected_outcome": "Gegner bleibt in Reaktion; wir diktieren Tempo.",
+          "resources_needed": [
+            "Tage-Zyklen",
+            "Geduld"
+          ]
+        },
+        {
+          "coa_id": "COA-B",
+          "title": "Zeuginnen-Reaktivierung (Loop verstärken)",
+          "narrative": "Mehr unabhängige Bestätiger = schnellere Orientierung für die Behörde.",
+          "actions": [
+            "Pretzer/Gurlhosur/Kraus kontaktieren.",
+            "Gemeinsame Gesamtschau bauen."
+          ],
+          "expected_outcome": "Muster-Beleg schneller sichtbar.",
+          "resources_needed": [
+            "Vertrauen"
+          ]
+        }
+      ],
+      "future_prediction": {
+        "if_we_act": [
+          {
+            "horizon": "3_months",
+            "scenario": "2-3 Loops durchlaufen; GStA reagiert langsam aber vorhersehbar."
+          },
+          {
+            "horizon": "6_months",
+            "scenario": "Durch konstante Zyklen ist das Muster im behördlichen Bewusstsein verankert."
+          },
+          {
+            "horizon": "12_months",
+            "scenario": "Wiederaufnahme oder Korrektur steht; Gegner konnte nie zur eigenen Entscheidung kommen."
+          }
+        ],
+        "if_we_wait": [
+          {
+            "horizon": "3_months",
+            "scenario": "Loop steht; Gegner gewinnt Zeit."
+          },
+          {
+            "horizon": "6_months",
+            "scenario": "Beschuldigte konsolidieren ihre Position."
+          },
+          {
+            "horizon": "12_months",
+            "scenario": "Fenster geschlossen, Spuren verwischt."
+          }
+        ],
+        "opponent_trajectory": "Langsame Reaktion (Monate). Gefahr nur bei Links.pdf-Einbringung (eigene Desorientierung)."
+      },
+      "gabor_mate_counsel": {
+        "voice": "Perspektive 1 — die Verschmelzung von Perspektive 1s strategischer Klarheit und Perspektive 1s mitfühlender Systemkritik, als eine einzige Stimme",
+        "opening": "Bevor von Strategie die Rede sein kann, muss gesehen werden, was wirklich vor uns liegt. Der Feind in diesem Fall ist nicht der Mann im Haus gegenüber. Der Feind ist das Schweigen, das sechs Frauen umschlossen hat und es Nichts genannt hat. Eine Institution, die ein Muster von sechs unabhängigen Zeuginnen nicht als Muster erkennt, ist nicht böse — sie ist verwundet. Sie hat gelernt, nicht zu fühlen, weil das Sehen eine Verantwortung verlangen würde, die sie nicht tragen will. Das ist die Pathologie des Normalen: das System nennt sein Nicht-Sehen ordnungsgemäß.\n\nDie Strategie, die sich hier ergibt, ist mitfühlend und unerbittlich zugleich. Mitfühlend mit Auftraggeberin, deren Nervensystem bereits genug getragen hat — sie gehört nicht in den direkten Konflikt, weil jeder Schritt in die Arena ihr System erneut aktiviert. Unerbittlich mit der Wahrheit: das Muster existiert, die Akte belegt es, und eine Gesamtschau lässt sich nicht dadurch entwerten, dass man die Einzelfälle isoliert.\n\nDer höchste Sieg ist der, der ohne Schlacht errungen wird — und der, der den Sieger nicht verwundet. Beides meint dasselbe. Wir werden nicht gegen das Gericht kämpfen. Wir werden das Muster so legen, dass es sich selbst erzählt, und Auftraggeberin im Hintergrund lassen, wo ihr Nervensystem atmen kann."
+      }
+    },
+    "context_dimensions": {
+      "migrationskontext": "Alle Betroffenen Frauen, mehrheitlich Migrationshintergrund — institutionelle Vulnerabilität"
+    }
+  },
+  "metrics": {
+    "observation": 80,
+    "orientation": 76,
+    "decision_latency": 28,
+    "adaptability": 82,
+    "loop_speed": 85,
+    "opponent_disruption": 72
+  },
+  "sources": [
+    "00_ERSTASSESSMENT.md",
+    "02_TIEFENANALYSE_2026-07-10.md",
+    "03_BEWEISLAGE_OHNE_KI_SPEKULATION_2026-07-10.md",
+    "04_ENTWURF_GStA_Ergänzung_2026-07-10.md",
+    "05_RFI-IRFOS_Stellungnahme_2026-07-10.pdf",
+    "IMG_9855-9857"
+  ],
+  "report": {
+    "executive_summary": "Loop-Geschwindigkeit als Waffe: wir zyklen Tage, Gegner Monate. Aufsichtsweg + Bescheidenheit + Fokus-Muster zwingt Beh. in Reaktion.",
+    "recommended_strategy": "COA-A primär (schneller Zyklus), B parallel, D Option, C nur Fallback.",
+    "reasoning": "operate_inside_loop: unsere Zykluszeit << Gegner. disorient: Fokus-Wechsel + Links.pdf-Zurückhaltung. · Shift: Vermieter Yves Netz statt Beschuldigte.",
+    "implementation_steps": [
+      "1. GStA-Reaktion abwarten (Beobachtung).",
+      "2. Orient: passt Framing? Nachsteürn.",
+      "3. Zeuginnen parallel reaktivieren (Loop verstärken).",
+      "4. Bei Stille: freundliche Nachfrage (neür Act-Zyklus).",
+      "5. DS-Redigung vor Weitergabe.",
+      "Mietrechtliche Achse: Yves Netz (Vermieter) prüfen."
+    ],
+    "decision_points": [
+      "GStA reagiert?",
+      "Gegner kontert schneller als erwartet?"
+    ],
+    "warning_signs": [
+      "Links.pdf bekannt",
+      "Gegner zykelt überraschend schnell"
+    ],
+    "fallback_plans": [
+      "COA-C anwaltlich",
+      "COA-D Ordnungsamt"
+    ],
+    "strategic_principles_applied": [
+      "observe",
+      "orient",
+      "decide",
+      "act",
+      "operate_inside_loop",
+      "disorient"
+    ],
+    "confidence_assessment": {
+      "level": "medium",
+      "basis": "Loop-Gap real (Tage vs Monate); GStA-Reaktion unbekannt."
+    },
+    "detailed_strategies": [
+      {
+        "coa_id": "COA-A",
+        "title": "Schneller Aufsichts-Zyklus (Loop-Geschwindigkeit)",
+        "narrative": "RFI-IRFOS zykelt in Tagen, Beschuldigte/StA in Monaten. Wir erzeugen neue Beobachtungen (Brief -> GStA-Reaktion -> Nachsteuerung) schneller als der Gegner kontern kann. Operate inside opponent's loop.",
+        "actions": [
+          "Brief 10.07 gesendet (Act).",
+          "GStA-Reaktion beobachten (Observe).",
+          "Bei Stille: Nachfrage = neuer Zyklus."
+        ],
+        "expected_outcome": "Gegner bleibt in Reaktion; wir diktieren Tempo.",
+        "resources_needed": [
+          "Tage-Zyklen",
+          "Geduld"
+        ]
+      },
+      {
+        "coa_id": "COA-B",
+        "title": "Zeuginnen-Reaktivierung (Loop verstärken)",
+        "narrative": "Mehr unabhängige Bestätiger = schnellere Orientierung für die Behörde.",
+        "actions": [
+          "Pretzer/Gurlhosur/Kraus kontaktieren.",
+          "Gemeinsame Gesamtschau bauen."
+        ],
+        "expected_outcome": "Muster-Beleg schneller sichtbar.",
+        "resources_needed": [
+          "Vertrauen"
+        ]
+      }
+    ],
+    "future_prediction": {
+      "if_we_act": [
+        {
+          "horizon": "3_months",
+          "scenario": "2-3 Loops durchlaufen; GStA reagiert langsam aber vorhersehbar."
+        },
+        {
+          "horizon": "6_months",
+          "scenario": "Durch konstante Zyklen ist das Muster im behördlichen Bewusstsein verankert."
+        },
+        {
+          "horizon": "12_months",
+          "scenario": "Wiederaufnahme oder Korrektur steht; Gegner konnte nie zur eigenen Entscheidung kommen."
+        }
+      ],
+      "if_we_wait": [
+        {
+          "horizon": "3_months",
+          "scenario": "Loop steht; Gegner gewinnt Zeit."
+        },
+        {
+          "horizon": "6_months",
+          "scenario": "Beschuldigte konsolidieren ihre Position."
+        },
+        {
+          "horizon": "12_months",
+          "scenario": "Fenster geschlossen, Spuren verwischt."
+        }
+      ],
+      "opponent_trajectory": "Langsame Reaktion (Monate). Gefahr nur bei Links.pdf-Einbringung (eigene Desorientierung)."
+    },
+    "gabor_mate_counsel": {
+      "voice": "Perspektive 1 — die Verschmelzung von Perspektive 1s strategischer Klarheit und Perspektive 1s mitfühlender Systemkritik, als eine einzige Stimme",
+      "opening": "Bevor von Strategie die Rede sein kann, muss gesehen werden, was wirklich vor uns liegt. Der Feind in diesem Fall ist nicht der Mann im Haus gegenüber. Der Feind ist das Schweigen, das sechs Frauen umschlossen hat und es Nichts genannt hat. Eine Institution, die ein Muster von sechs unabhängigen Zeuginnen nicht als Muster erkennt, ist nicht böse — sie ist verwundet. Sie hat gelernt, nicht zu fühlen, weil das Sehen eine Verantwortung verlangen würde, die sie nicht tragen will. Das ist die Pathologie des Normalen: das System nennt sein Nicht-Sehen ordnungsgemäß.\n\nDie Strategie, die sich hier ergibt, ist mitfühlend und unerbittlich zugleich. Mitfühlend mit Auftraggeberin, deren Nervensystem bereits genug getragen hat — sie gehört nicht in den direkten Konflikt, weil jeder Schritt in die Arena ihr System erneut aktiviert. Unerbittlich mit der Wahrheit: das Muster existiert, die Akte belegt es, und eine Gesamtschau lässt sich nicht dadurch entwerten, dass man die Einzelfälle isoliert.\n\nDer höchste Sieg ist der, der ohne Schlacht errungen wird — und der, der den Sieger nicht verwundet. Beides meint dasselbe. Wir werden nicht gegen das Gericht kämpfen. Wir werden das Muster so legen, dass es sich selbst erzählt, und Auftraggeberin im Hintergrund lassen, wo ihr Nervensystem atmen kann."
+    }
+  },
+  "cross_framework_themes": [
+    "Fokus Muster+Verfahren (nicht Kamera)",
+    "Bescheidenheits-Framing / Gesicht-wahrend",
+    "Links.pdf-Spekulation strikt zurueckhalten",
+    "Aufsichtsweg primaer, Klageerzwingung nur Fallback",
+    "COA-A als primäre Strategie"
+  ]
+}

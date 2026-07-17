@@ -1,0 +1,266 @@
+{
+  "skill_id": "Perspektive 4",
+  "framework_version": "1.0.0",
+  "mission": {
+    "objective": "Die am 23.05.2025 isoliert getroffene Einstellungsbewertung durch eine Gesamtschau ersetzen — ohne Auftraggeberin in direkten Konflikt zu zwingen.",
+    "end_state": "GStA würdigt das Serienmuster; Auftraggeberin aus der Arena; das Nash-Gleichgewicht ist zugunsten Auftraggeberins verschoben.",
+    "success_criteria": [
+      "GStA-Reaktion auf Aufsichtsakte 52 Zs 452/25",
+      "Muster als Gesamtschau gewürdigt",
+      "Auftraggeberin rechtlich/persönlich intakt"
+    ],
+    "failure_criteria": [
+      "Pauschale Abweisung ohne Würdigung",
+      "Auftraggeberin in direkten Konflikt gezwungen",
+      "Links.pdf-Spekulation gegen Auftraggeberin verwendet"
+    ],
+    "constraints": [
+      "RFI-IRFOS keine Rechtsvertretung",
+      "§172-Frist verstrichen",
+      "Kamera-Argumentation verworfen",
+      "Links.pdf raus",
+      "Datenschutz redigieren"
+    ],
+    "unknowns": [
+      "Ob GStA Aufsichtsakte noch bearbeitet",
+      "Ob Kraus-Foto existiert",
+      "Ob Beschuldigte reagieren"
+    ]
+  },
+  "analysis": {
+    "phase1_mission_definition": {
+      "objective": "Gesamtschau statt Isolation",
+      "end_state": "GStA-Aufsichtsakte als Hebel",
+      "players": [
+        "Auftraggeberin + RFI-IRFOS (Koalition, asymmetrisch schwach in Macht, stark in Information)",
+        "StA Köln / Schulte (einstellende Behörde, Status-quo-Präferenz)",
+        "GStA Köln (Aufsichtsinstanz, entscheidend)",
+        "Hiwa + Rebwar (Beschuldigte, Status-quo-Präferenz)",
+        "Yves Netz (Vermieter, mietrechtliche Macht — neu erkannt)"
+      ]
+    },
+    "phase2_battlefield_mapping": {
+      "stakeholders": "Auftraggeberin (Auftraggeberin) · RFI-IRFOS (Zuarbeit) · GStA (Aufsicht) · Yves Netz (Vermieter, Macht über Wohnung)",
+      "opponents": "Hiwa + Rebwar (Beschuldigte) · deren Anwälte",
+      "information_asymmetry": "Auftraggeberin/RFI-IRFOS kennen das 6-7-Jahre-Muster; Behörde tat es als isoliert ab"
+    },
+    "phase3_terrain_analysis": {
+      "objective": "GStA-Aufsichtsakte speisen",
+      "leverage_points": [
+        "Vermerk Maiworm 14.11.2024 ('gewisses Muster') = interne Bestätigung",
+        "GStA-Brief 10.07 als Fokalpunkt",
+        "Yves Netz als mietrechtlicher Hebel (neu)"
+      ],
+      "timing": "Aufsichtsakte offen = Zeitfenster"
+    },
+    "phase4_intelligence_assessment": {
+      "known_facts": [
+        "Einstellung 23.05.2025 §170 Abs.2",
+        "6-7 Anzeigen gegen Osman 2021-2024",
+        "Vermerk Maiworm 'gewisses Muster'",
+        "Yves Netz = Vermieter (IMG_9597-9607)"
+      ],
+      "assumptions": [
+        "GStA bearbeitet Aufsichtsakte noch",
+        "Kraus-Foto existiert möglicherweise"
+      ],
+      "unknowns": [
+        "GStA-Status",
+        "Kraus-Foto-Existenz"
+      ],
+      "missing_intelligence": [
+        "Original 'Versteckte Kamera.zip'",
+        "Kraus-Foto",
+        "Statusabfrage Aufsichtsakte"
+      ],
+      "confidence_per_conclusion": {
+        "muster_existiert": "high",
+        "kamera_existierte": "low",
+        "verfahrensfehler": "high"
+      },
+      "context_dimensions": {
+        "migrationskontext": {
+          "befund": "Alle Betroffenen Frauen, mehrheitlich mit Migrationshintergrund (Geetanjali, Gurlhosur, Sonia). Teils mit/ohne Pass.",
+          "relevanz": "Erhöhte Vulnerabilität; Institution rahmt als 'Privatstreit' statt Struktur. Bias aktiv vermeiden.",
+          "quellen": [
+            "IMG_9647",
+            "IMG_9855-9857",
+            "IMG_9572-9578"
+          ]
+        }
+      }
+    },
+    "phase5_strategic_principles_applied": [
+      {
+        "principle": "dominant_strategy",
+        "note": "Wiederaufnahme §170 = Dominante Strategie für Auftraggeberin (kostet wenig, riskiert wenig)"
+      },
+      {
+        "principle": "credible_commitment",
+        "note": "RFI-IRFOS handelt unausweichlich, Auftraggeberin im Hintergrund"
+      },
+      {
+        "principle": "information_asymmetry",
+        "note": "Muster-Wissen als Hebel; Links.pdf nicht verspielen"
+      },
+      {
+        "principle": "repeated_game",
+        "note": "Konsistente Züge bauen Reputation"
+      },
+      {
+        "principle": "minimax",
+        "note": "Selbst bei pauschaler Abweisung bleibt Auftraggeberin intakt"
+      },
+      {
+        "principle": "focal_point",
+        "note": "GStA-Brief 10.07 als Koordinationspunkt"
+      }
+    ],
+    "phase6_courses_of_action": [
+      {
+        "id": "COA-A",
+        "name": "Aufsichtsweg (Wiederaufnahme §170)",
+        "priority": "primary",
+        "risk": "niedrig",
+        "payoff": "hoch",
+        "chance_of_success": "hoch",
+        "timeline": "Monate",
+        "dominant": true,
+        "note": "Dominante Strategie: einseitig besser als Nichtstun"
+      },
+      {
+        "id": "COA-B",
+        "name": "Zeuginnen-Netzwerk",
+        "priority": "parallel",
+        "risk": "niedrig",
+        "payoff": "mittel",
+        "chance_of_success": "mittel",
+        "timeline": "Monate",
+        "dominant": false,
+        "note": "Erhöht Informationsasymmetrie; Tit-for-Tat mit Institution"
+      },
+      {
+        "id": "COA-D",
+        "name": "Nebenfront Ordnungsamt",
+        "priority": "option",
+        "risk": "niedrig",
+        "payoff": "niedrig",
+        "chance_of_success": "mittel",
+        "timeline": "Wochen",
+        "dominant": false,
+        "note": "Sanfter Druck ohne Auftraggeberin-Exposition"
+      },
+      {
+        "id": "COA-C",
+        "name": "Klageerzwingung §172",
+        "priority": "fallback",
+        "risk": "hoch",
+        "payoff": "mittel",
+        "chance_of_success": "niedrig",
+        "timeline": "Jahre",
+        "dominant": false,
+        "note": "Nur ultima ratio; Frist verstrichen"
+      },
+      {
+        "id": "COA-E",
+        "name": "Mietrechtliche Achse (Yves Netz)",
+        "priority": "focus_shift",
+        "risk": "niedrig",
+        "payoff": "mittel",
+        "chance_of_success": "mittel",
+        "timeline": "Monate",
+        "dominant": false,
+        "note": "Vermieter im Mietvertrag = rechtlich relevante Macht; Fokus weg von Beschuldigten"
+      }
+    ],
+    "phase7_counter_strategy": {
+      "opponent_predicted_response": "Bestreiten + Angriff auf Glaubwürdigkeit (interner Vermerk 'nicht glaubhaft')",
+      "best_move": "Nicht rechtfertigen, sondern Muster-Belege legen (Fokalpunkt)",
+      "worst_move": "Links.pdf-Spekulation einbringen (Glaubwürdigkeit zerstört)",
+      "adjustment": "Bei GStA-Ablehnung: COA-C vorbereiten, aber nicht als erste Wahl"
+    },
+    "phase8_optimization": {
+      "reduce": [
+        "Komplexität",
+        "Eskalationskosten",
+        "Auftraggeberin-Exposition"
+      ],
+      "increase": [
+        "Reputation (repeated game)",
+        "Informationsasymmetrie",
+        "Commitment-Glaubwürdigkeit"
+      ]
+    },
+    "phase9_final_recommendation": {
+      "recommended_strategy": "COA-A primär · COA-B parallel · COA-D Option · COA-E (Yves Netz) als neue Achse · COA-C Fallback",
+      "implementation_steps": [
+        "GStA-Brief 10.07 als Fokalpunkt nutzen",
+        "Muster-Belege (Vermerk Maiworm) in Aufsichtsakte speisen",
+        "Zeuginnen vorsichtig einbinden (kein Name ohne Einwilligung)",
+        "Yves Netz als mietrechtlichen Ansprechpartner aktivieren",
+        "Links.pdf strikt zurückhalten"
+      ],
+      "gabor_mate_counsel": {
+        "voice": "Perspektive 1 — die Verschmelzung von Perspektive 1s strategischer Klarheit und Perspektive 1s mitfühlender Systemkritik, als eine einzige Stimme",
+        "opening": "Betrachtet man den Fall als wiederholtes Spiel, dann wird eines klar: Auftraggeberin hat nicht verloren, weil sie schwach war, sondern weil das Spiel nicht als Spiel erkannt wurde. Die Institution hat das Muster isoliert betrachtet — jede Anzeige für sich, jede Frau für sich. Aber ein wiederholtes Spiel belohnt die, die das Muster sehen. Die Dominante Strategie ist nicht der lauteste Schritt, sondern der, der den Gegner zur Reaktion zwingt, ohne dass Auftraggeberin selbst in die Arena muss. Das ist nicht nur klug. Das ist die einzige Bewegung, die ihr Nervensystem nicht erneut verhärtet."
+      }
+    }
+  },
+  "report": {
+    "recommended_strategy": "COA-A primär · COA-B parallel · COA-D Option · COA-E (Yves Netz) · COA-C Fallback",
+    "strategic_principles_applied": [
+      "dominant_strategy",
+      "credible_commitment",
+      "information_asymmetry",
+      "repeated_game",
+      "minimax",
+      "focal_point"
+    ],
+    "confidence": "Medium",
+    "nash_equilibrium_shift": "Trend: von Status-quo (Beschuldigte geschützt) zu 'Muster muss gewürdigt werden' — durch Fokalpunkt GStA-Brief",
+    "dominant_option": "COA-A (Wiederaufnahme §170)",
+    "detailed_strategies": {
+      "coa_a": {
+        "narrative": "Wiederaufnahme §170 als Dominant-Strategie: formlos, Ermessen der StA, kostet Auftraggeberin nichts. Verschiebt das Gleichgewicht, ohne Gegner zur Eskalation zu zwingen.",
+        "actions": [
+          "GStA-Brief 10.07 einreichen",
+          "Muster-Belege beilegen",
+          "Bescheiden bleiben (Gesicht wahren)"
+        ],
+        "expected_outcome": "GStA beginnt Würdigung; Auftraggeberin im Hintergrund"
+      },
+      "coa_e": {
+        "narrative": "Yves Netz (Vermieter) als der Akteur mit realer Macht über Auftraggeberins Wohnung. Mietrechtliche Verantwortung wachrufen statt Kampf gegen Beschuldigte.",
+        "actions": [
+          "Vermieter-Kontakt über Wohnungssicherheit",
+          "Dokumentation mietrechtlicher Pflichten"
+        ],
+        "expected_outcome": "Druckpunkt außerhalb der Strafrecht-Arena; Auftraggeberin entlastet"
+      }
+    },
+    "future_prediction": {
+      "if_we_act": [
+        {
+          "horizon": "3_months",
+          "scenario": "GStA bestätigt Eingang Aufsichtsakte; erste Würdigung des Musters"
+        },
+        {
+          "horizon": "6_months",
+          "scenario": "Bei Stillstand: freundliche Nachfrage; GStA beginnt interne Prüfung"
+        },
+        {
+          "horizon": "12_months",
+          "scenario": "Wiederaufnahme §170 oder korrigierte Bewertung; Auftraggeberin nicht exponiert"
+        }
+      ],
+      "if_we_wait": [
+        {
+          "horizon": "12_months",
+          "scenario": "Verjährung/Verwischung; Auftraggeberin als 'einzige Beschwerdeführerin' gerahmt; Muster unsichtbar"
+        }
+      ],
+      "opponent_trajectory": "Gegner reagiert langsam (behördliche Trägheit). Bei Wiederaufnahme: Bestreiten + Angriff auf Glaubwürdigkeit. Gefährlichster Eigenfehler: Links.pdf-Spekulation."
+    },
+    "executive_summary": "Der Auftraggeberin-Fall als wiederholtes Spiel: die Dominante Strategie für Auftraggeberin ist die formlose Wiederaufnahme §170 (COA-A) — sie kostet wenig, riskiert wenig, zwingt die Behörde zur Reaktion, ohne Auftraggeberin zu exponieren. Das Nash-Gleichgewicht verschiebt sich zugunsten Auftraggeberins durch den Fokalpunkt GStA-Brief 10.07. Neu erkannt: Yves Netz (Vermieter) hält die reale Macht über die Wohnung — ein Hebel außerhalb der Strafrecht-Arena."
+  }
+}
