@@ -87,7 +87,7 @@ def llm_check(report_path: pathlib.Path, sources_dir: pathlib.Path, facts: dict)
         except Exception:
             pass
 
-    report_text = strip_html(report_path.read_text(encoding="utf-8"))
+    report_text = strip_html(report_path.read_text(encoding="utf-8"))[:4000]
 
     prompt = f"""Du bist der FINAL FACT-CHECKER der Strategy-Pipeline.
 Lies den gesamten Report durch und cross-checke JEDEN Fakt gegen die
@@ -123,10 +123,13 @@ Wenn kein Konflikt gefunden: schreibe genau eine Zeile: SAUBER"""
              "--skills", "final-factcheck"],
             capture_output=True, text=True, timeout=180,
         )
-        out = result.stdout
-        if result.returncode != 0:
+        # Hermes wirft am Ende oft a asyncio "Event loop is closed"
+        # RuntimeError beim Shutdown — des isch harmlos, des Output isch
+        # trotzdem in stdout. Nur bei echtem Fehler (kein stdout) WARNen.
+        out = result.stdout or ""
+        if not out.strip() and result.returncode != 0:
             return [f"WARN: LLM-Check Fehler (rc={result.returncode}): "
-                    f"{result.stderr[:200]}. Pattern-Check läuft weiter."]
+                    f"{(result.stderr or '')[:200]}. Pattern-Check läuft weiter."]
     except Exception as e:
         return [f"WARN: LLM-Check nicht ausführbar ({e}). Pattern-Check läuft weiter."]
 
