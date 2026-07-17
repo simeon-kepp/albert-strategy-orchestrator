@@ -118,7 +118,7 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
          "— keine Blackbox."},
         {"type": "table", "headers": ["Agent", "Perspektive", "Primäre Entscheidung",
          "Confidence", "Output-Typ"],
-         "rows": [[esc(s.get("id", "?")),
+         "rows": [[sanitize(esc(s.get("id", "?"))),
                    sanitize(esc(s.get("perspective", s.get("name", "?")))),
                    esc(primary.get(s.get("id", ""), {}).get("coa", "—") if isinstance(primary.get(s.get("id", ""), {}), dict) else "—"),
                    f"{int(conf.get(s.get('id',''), 0)*100)}%" if isinstance(conf.get(s.get('id',''), 0), (int, float)) else f"{esc(conf.get(s.get('id',''), '?'))}",
@@ -154,7 +154,7 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
     for s in skills:
         persp_blocks.append({
             "type": "box", "style": "finding",
-            "title": f"Perspektive {esc(s.get('id',''))} — {sanitize(esc(s.get('perspective', s.get('name',''))))}",
+            "title": f"Perspektive {sanitize(esc(s.get('id','')))} — {sanitize(esc(s.get('perspective', s.get('name',''))))}",
             "text": sanitize(esc(s.get("summary", s.get("analysis", "—"))))
         })
         # COA pro Perspektive
