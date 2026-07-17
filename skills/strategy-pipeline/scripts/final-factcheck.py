@@ -21,6 +21,7 @@ import json
 import pathlib
 import re
 import subprocess
+import tempfile
 
 # Framework-Namen (HARD FAIL im Report)
 FORBIDDEN_FRAMEWORKS = [
@@ -118,18 +119,22 @@ KONFLIKT: <Behauptung im Report> | <Was die Quelle sagt> | <Quellen-Ref>
 Wenn kein Konflikt gefunden: schreibe genau eine Zeile: SAUBER"""
 
     try:
-        result = subprocess.run(
-            ["hermes", "chat", "-q", prompt, "-Q",
-             "--skills", "final-factcheck"],
-            capture_output=True, text=True, timeout=180,
-        )
-        # Hermes wirft am Ende oft a asyncio "Event loop is closed"
-        # RuntimeError beim Shutdown — des isch harmlos, des Output isch
-        # trotzdem in stdout. Nur bei echtem Fehler (kein stdout) WARNen.
-        out = result.stdout or ""
+        # Hermes wirft am Ende a asyncio "Event loop is closed" RuntimeError
+        # durch subprocess.run — des umgehen wir mit Datei-Redirect statt
+        # capture_output. stdout landet in out.txt, wird danach gelesen.
+        out_file = pathlib.Path(tempfile.mktemp(suffix=".txt"))
+        with open(out_file, "w") as f:
+            result = subprocess.run(
+                ["hermes", "chat", "-q", prompt, "-Q",
+                 "--skills", "final-factcheck"],
+                stdout=f, stderr=subprocess.PIPE, timeout=180,
+            )
+        out = out_file.read_text(encoding="utf-8", errors="ignore")
+        out_file.unlink(missing_ok=True)
         if not out.strip() and result.returncode != 0:
+            err = (result.stderr or b"").decode(errors="ignore")[:200]
             return [f"WARN: LLM-Check Fehler (rc={result.returncode}): "
-                    f"{(result.stderr or '')[:200]}. Pattern-Check läuft weiter."]
+                    f"{err}. Pattern-Check läuft weiter."]
     except Exception as e:
         return [f"WARN: LLM-Check nicht ausführbar ({e}). Pattern-Check läuft weiter."]
 
