@@ -72,50 +72,71 @@ def pattern_check(text: str, facts: dict) -> list:
 
 
 def llm_check(report_path: pathlib.Path, sources_dir: pathlib.Path, facts: dict) -> list:
-    """Delegiert an Subagent für kontextuellen Deep-Check.
+    """Echter kontextueller Deep-Check via Hermes `chat` (non-interactive).
 
-    Der Subagent bekommt: (a) voller Report-Text, (b) facts.json,
-    (c) Hinweis auf Quell-Docs. Er retourniert eine Liste von
-    Konflikten im Format: 'KONFLIKT: <Behauptung> vs <Quelle>'.
+    Ruft `hermes chat -q ... -Q` auf — der Subagent liest den vollen Report
+    und cross-checkt ihn gegen die Quell-Docs. Retourniert bei Konflikten
+    Zeilen die mit 'KONFLIKT:' beginnen.
     """
-    # Hinweis: in echt ruft des delegate_task. Hier simulieren wir den
-    # Trigger-Aufruf und parsen das Subagent-Resultat.
+    # Quell-Docs als Kontext mitgeben (falls vorhanden)
+    src_files = sorted(sources_dir.glob("*.md")) if sources_dir.exists() else []
+    src_context = ""
+    for sf in src_files[:6]:  # die wichtigsten 6 Docs
+        try:
+            src_context += f"\n--- {sf.name} ---\n{sf.read_text(encoding='utf-8')[:2500]}\n"
+        except Exception:
+            pass
+
+    report_text = strip_html(report_path.read_text(encoding="utf-8"))
+
     prompt = f"""Du bist der FINAL FACT-CHECKER der Strategy-Pipeline.
 Lies den gesamten Report durch und cross-checke JEDEN Fakt gegen die
-Quell-Dokumente.
+Quell-Dokumente. Du bist die zweite, unabhängige Instanz (Lauras Prinzip:
+'mach wie laura, nie wie ich') — finde was automatische Pattern-Checks
+übersehen haben.
 
-REPORT: {report_path.read_text(encoding='utf-8')[:8000]}...
+=== REPORT (vollständig) ===
+{report_text[:9000]}
 
-FACTS (Ground-Truth): {json.dumps(facts, ensure_ascii=False)[:2000]}
+=== FACTS (Ground-Truth, Entity-Ground-Truth) ===
+{json.dumps(facts.get('entities', {}), ensure_ascii=False, indent=1)[:2500]}
 
-QUELL-DOKUMENTE liegen in: {sources_dir}
-- 02_TIEFENANALYSE: wer hat Anzeige erstattet (§6 Entity-Table!)
-- 03_BEWEISLAGE: Anzeigenerstatterinnen-Liste
+=== QUELL-DOKUMENTE (Auszüge) ===
+{src_context[:6000]}
 
 PRÜFE GENAU:
-1. Jede Person die als 'Anzeige gegen X' / Anzeigenerstatter beschrieben
-   wird — steht sie in facts.json mit anzeigebereit=true?
-2. Jede Zahl/Datum/Aktenzeichen im Report — steht sie so in den Quellen?
-3. Jede Behauptung über eine Person — widerspricht sie der Quelle?
+1. Jede Person die als 'Anzeige gegen X' / Anzeigenerstatter / 'erstattete'
+   beschrieben wird — steht sie in facts.entities mit anzeigebereit=true?
+   (Wenn anzeigebereit=false: HARD KONFLIKT)
+2. Jede Zahl / Datum / Aktenzeichen im Report — steht sie so in den Quellen?
+3. Jede Behauptung über eine Person (Rolle, Status) — widerspricht sie der Quelle?
+4. Framework-Namen (Gabor/Sun Tzu/Sun Mate/OODA/Game Theory/Systems) im Report?
+5. 'Linsen' / Testfall-Name (Laura) im Report?
 
-RETURN: Eine Liste, eine Zeile pro Konflikt:
+ANTWORTE strikt im Format (eine Zeile pro Fund):
 KONFLIKT: <Behauptung im Report> | <Was die Quelle sagt> | <Quellen-Ref>
-Wenn kein Konflikt: 'SAUBER'."""
+Wenn kein Konflikt gefunden: schreibe genau eine Zeile: SAUBER"""
 
-    # Trigger Subagent (Hermes delegate_task)
     try:
         result = subprocess.run(
-            ["hermes", "delegate", "--goal", prompt, "--role", "leaf"],
-            capture_output=True, text=True, timeout=120,
+            ["hermes", "chat", "-q", prompt, "-Q",
+             "--skills", "final-factcheck"],
+            capture_output=True, text=True, timeout=180,
         )
         out = result.stdout
+        if result.returncode != 0:
+            return [f"WARN: LLM-Check Fehler (rc={result.returncode}): "
+                    f"{result.stderr[:200]}. Pattern-Check läuft weiter."]
     except Exception as e:
         return [f"WARN: LLM-Check nicht ausführbar ({e}). Pattern-Check läuft weiter."]
 
     errors = []
     for line in out.splitlines():
-        if line.strip().startswith("KONFLIKT:"):
-            errors.append(f"HARD FAIL [LLM]: {line.strip()}")
+        s = line.strip()
+        if s.startswith("KONFLIKT:"):
+            errors.append(f"HARD FAIL [LLM]: {s}")
+        elif s == "SAUBER":
+            pass  # OK
     return errors
 
 
