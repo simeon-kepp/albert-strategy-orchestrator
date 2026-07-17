@@ -93,7 +93,7 @@ fn main() -> Result<()> {
     println!("Mission geladen ({} Zeichen).", mission_text.len());
 
     // 3) Skill-Reports laden (Test-Impl: echte Analyse-JSONs aus Laura-Ordner)
-    let reports = load_reports_for(&cli.skills)?;
+    let reports = load_reports_for(&cli_skills)?;
 
     // 4) Jeden Report gegen schema.json validieren
     for r in &reports {
