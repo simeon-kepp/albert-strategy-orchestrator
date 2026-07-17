@@ -29,6 +29,7 @@ def esc(s):
 
 # Framework-Namen die NIE im Report erscheinen dürfen (Härte-Regel)
 FORBIDDEN_FRAMEWORKS = [
+    ("sun_mate", "Perspektive 1"),
     ("sun_tzu", "Perspektive 1"),
     ("sun mate", "Perspektive 1"),
     ("sun tzu", "Perspektive 1"),
@@ -37,6 +38,7 @@ FORBIDDEN_FRAMEWORKS = [
     ("gabor mate", "Perspektive 1"),
     ("gabor_mate_counsel", "Perspektive 1"),
     ("gabor mate counsel", "Perspektive 1"),
+    ("gabor", "Perspektive 1"),
     ("ooda", "Perspektive 2"),
     ("game theory", "Perspektive 4"),
     ("game-theoretic", "Perspektive 4"),
