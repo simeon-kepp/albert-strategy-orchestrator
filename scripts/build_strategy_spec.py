@@ -119,7 +119,7 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
          "rows": [[esc(s.get("id", "?")),
                    sanitize(esc(s.get("perspective", s.get("name", "?")))),
                    esc(primary.get(s.get("id", ""), {}).get("coa", "—") if isinstance(primary.get(s.get("id", ""), {}), dict) else "—"),
-                   f"{int(conf.get(s.get('id',''), 0)*100)}%",
+                   f"{int(conf.get(s.get('id',''), 0)*100)}%" if isinstance(conf.get(s.get('id',''), 0), (int, float)) else f"{esc(conf.get(s.get('id',''), '?'))}",
                    esc(s.get("output_type", "Analyse"))]
                   for s in skills]},
     ]
