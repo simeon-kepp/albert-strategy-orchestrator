@@ -18,8 +18,9 @@ use consensus::ConsensusResult;
 #[derive(Parser, Debug)]
 #[command(name = "albert-strategy", about = "Multi-framework strategy orchestrator (sun_mate, ooda, systems, game_theory, ...)")]
 struct Cli {
-    /// Komma-getrennte Liste der Skills, z.B. "sun_mate,ooda,systems"
-    #[arg(long, value_delimiter = ',', default_value = "sun_mate")]
+    /// Komma-getrennte Liste der Skills, z.B. "sun_mate,ooda,systems".
+    /// "all" = alle verfügbaren Skills dynamisch laden.
+    #[arg(long, value_delimiter = ',', default_value = "all")]
     skills: Vec<String>,
 
     /// Pfad zur Missions-Datei (Text/JSON). Wenn fehlend: stdin.
@@ -52,8 +53,16 @@ fn main() -> Result<()> {
     let available = discovery::discover_skills()?;
     let avail_map: std::collections::HashMap<&str, &discovery::SkillMeta> =
         available.iter().map(|(id, m)| (id.as_str(), m)).collect();
+
+    // "all" = alle verfuegbaren Skills dynamisch
+    let cli_skills: Vec<String> = if cli.skills == vec!["all"] {
+        available.iter().map(|(id, _)| id.clone()).collect()
+    } else {
+        cli.skills.clone()
+    };
+
     let mut chosen = Vec::new();
-    for s in &cli.skills {
+    for s in &cli_skills {
         match avail_map.get(s.as_str()) {
             Some(m) => chosen.push((s.clone(), (*m).clone())),
             None => anyhow::bail!(
@@ -142,7 +151,10 @@ fn load_reports_for(skills: &[String]) -> Result<Vec<StrategyReport>> {
     .join("Desktop/do it for laura ");
     let mut out = Vec::new();
     for s in skills {
-        let p = base.join(format!("{}_analysis.json", s));
+        // Bevorzuge generic Version (falls vorhanden)
+        let generic = base.join(format!("{}_analysis_generic.json", s));
+        let legacy = base.join(format!("{}_analysis.json", s));
+        let p = if generic.exists() { generic } else { legacy };
         if !p.exists() {
             anyhow::bail!(
                 "Kein Analyse-JSON fuer '{}' unter {} — Pipeline zuerst im Agent ausfuehren.",
