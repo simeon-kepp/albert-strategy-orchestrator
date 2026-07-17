@@ -11,15 +11,15 @@
       "rolle": "5. Mitbewohnerin (Okt-Dez 2023)",
       "anzeigebereit": true,
       "anzahl_anzeigen": 1,
-      "verfahren": "Az. 250 Js 462/24",
-      "quelle": "02_TIEFENANALYSE §6 Z.90 (IMG_9576, 9835-9861)"
+      "verfahren": "Polizei-AZ 240829-0306-IP6425 (02 §1); Az. 250 Js 462/24 (02 §6 Z.90, IMG_9576/9835-9861)",
+      "quelle": "02_TIEFENANALYSE §6 Z.90 (IMG_9576, 9835-9861) + §1 (Polizeivermerk)"
     },
     "Geetanjali Shekharappa Gurlhosur": {
       "rolle": "Mitbewohnerin",
       "anzeigebereit": true,
       "anzahl_anzeigen": 1,
-      "quelle": "Strafantragsformular 05.11.2024",
-      "notiz": "Behält Strafantrag vor, stellt ihn ausdrücklich nicht"
+      "quelle": "Strafantragsformular 05.11.2024 + Vernehmung 18.03.2025 (02 §1)",
+      "notiz": "Behielt Strafantrag zunächst vor (05.11.2024), STELLTE ihn dann am 18.03.2025 (Finalzustand: 1 Anzeige)"
     },
     "Katrin Pretzer": {
       "rolle": "Mitbewohnerin / Zeugin",
