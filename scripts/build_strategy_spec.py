@@ -62,6 +62,14 @@ def sanitize(text: str) -> str:
 
 def build(consolidated: dict, facts: dict, title: str) -> dict:
     skills = consolidated.get("skills", [])
+    # Skill-IDs aus skill_id extrahieren (nicht 'id')
+    for s in skills:
+        if "id" not in s or not s.get("id"):
+            s["id"] = s.get("skill_id", "?")
+        if "summary" not in s or not s.get("summary"):
+            s["summary"] = s.get("analysis", s.get("report", "—"))
+        if "perspective" not in s or not s.get("perspective"):
+            s["perspective"] = s.get("skill_id", "?")
     consensus = consolidated.get("consensus_score", 0)
     all_agree = consolidated.get("all_agree_primary", False)
     primary = consolidated.get("primary_coa", {})
@@ -234,7 +242,7 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
 
     spec = {
         "title": title,
-        "app": "Strategie- & Versagensbericht",
+        "app": "RFI-IRFOS Strategie- & Versagensbericht",
         "subtitle": f"Konsens-Score {consensus}% · {len(skills)} Perspektiven · RFI-IRFOS Pipeline",
         "meta": meta,
         "exec_summary": exec_summary,
