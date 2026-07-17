@@ -66,7 +66,8 @@ def extract_text(v, _depth=0):
     """Konvertiert ein beliebiges Feld rekursiv in lesbaren Text (UNCUT).
 
     Sammelt ALLE String-Values (außer reine Metadaten-Keys). Behält die
-    Tiefenstruktur als lesbare Abschnitte.
+    Tiefenstruktur als lesbare Abschnitte. Dict-Keys werden ebenfalls
+    sanitize() (weil z.B. 'sun_mate: {...}' als Key erscheinen kann).
     """
     if v is None:
         return ""
@@ -79,12 +80,13 @@ def extract_text(v, _depth=0):
                     "scenario", "objective", "end_state", "mission", "befund"):
             if key in v and isinstance(v[key], str) and len(v[key]) > 20:
                 return sanitize(v[key])
-        # Ansonsten: rekursiv alle Values (außer skip)
+        # Ansonsten: rekursiv alle Values (außer skip) — Keys sanitizen
         skip = {"id", "skill_id", "framework_version", "sources"}
         parts = []
         for k, val in v.items():
             if k in skip:
                 continue
+            k_san = sanitize(k)
             t = extract_text(val, _depth + 1)
             if t and len(t.strip()) > 10:
                 parts.append(t)
@@ -198,7 +200,7 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
             if principles:
                 whitebox_blocks.append({
                     "type": "table",
-                    "headers": [f"Perspektive {esc(s.get('id',''))} — angewandte Prinzipien", "Anwendung"],
+                    "headers": [f"Perspektive {sanitize(esc(s.get('id','')))} — angewandte Prinzipien", "Anwendung"],
                     "rows": [[sanitize(esc(p.get("principle", p) if isinstance(p, dict) else p)),
                               sanitize(esc(p.get("application", "—") if isinstance(p, dict) else "—"))]
                              for p in principles[:8]],
