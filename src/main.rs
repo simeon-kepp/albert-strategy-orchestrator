@@ -1,8 +1,8 @@
-//! albert strategy --skills sun_mate,ooda,systems --mission mission.txt [--out report.json]
+//! albert strategy --skills sun_mate,ooda,systems,game_theory --mission mission.txt [--out report.json]
 //!
-//! Multi-Framework Strategy Orchestrator. Lädt die gewählten Skills aus
+//! Multi-Framework Strategy Orchestrator. Laedt die gewaehlten Skills aus
 //! ~/.hermes/skills/strategy/<id>/, validiert die Skill-Reports gegen schema.json,
-//! führt die Consensus-Engine aus und schreibt einen konsolidierten Report.
+//! fuehrt die Consensus-Engine aus und schreibt einen konsolidierten Report.
 
 mod api;
 mod consensus;
@@ -16,7 +16,7 @@ use api::StrategyReport;
 use consensus::ConsensusResult;
 
 #[derive(Parser, Debug)]
-#[command(name = "albert-strategy", about = "Multi-framework strategy orchestrator (sun_mate, ooda, systems, ...)")]
+#[command(name = "albert-strategy", about = "Multi-framework strategy orchestrator (sun_mate, ooda, systems, game_theory, ...)")]
 struct Cli {
     /// Komma-getrennte Liste der Skills, z.B. "sun_mate,ooda,systems"
     #[arg(long, value_delimiter = ',', default_value = "sun_mate")]
@@ -26,11 +26,11 @@ struct Cli {
     #[arg(long)]
     mission: Option<PathBuf>,
 
-    /// Ausgabe-Pfad für den konsolidierten JSON-Report.
+    /// Ausgabe-Pfad fuer den konsolidierten JSON-Report.
     #[arg(long)]
     out: Option<PathBuf>,
 
-    /// Nur verfügbare Skills auflisten.
+    /// Nur verfuegbare Skills auflisten.
     #[arg(long)]
     list: bool,
 }
@@ -40,7 +40,7 @@ fn main() -> Result<()> {
 
     if cli.list {
         let skills = discovery::discover_skills()?;
-        println!("Verfügbare Strategy-Skills:");
+        println!("Verfuegbare Strategy-Skills:");
         for (id, meta) in &skills {
             println!("  {}  —  {} v{}", id, meta.display_name, meta.version);
             println!("        {}", meta.description);
@@ -48,20 +48,22 @@ fn main() -> Result<()> {
         return Ok(());
     }
 
-    // 1) Skills auflösen
+    // 1) Skills aufloesen
     let available = discovery::discover_skills()?;
     let avail_map: std::collections::HashMap<&str, &discovery::SkillMeta> =
         available.iter().map(|(id, m)| (id.as_str(), m)).collect();
-
     let mut chosen = Vec::new();
     for s in &cli.skills {
         match avail_map.get(s.as_str()) {
             Some(m) => chosen.push((s.clone(), (*m).clone())),
-            None => anyhow::bail!("Skill '{}' nicht gefunden unter ~/.hermes/skills/strategy/", s),
+            None => anyhow::bail!(
+                "Skill '{}' nicht gefunden unter ~/.hermes/skills/strategy/",
+                s
+            ),
         }
     }
     if chosen.is_empty() {
-        anyhow::bail!("Keine gültigen Skills gewählt.");
+        anyhow::bail!("Keine gueltigen Skills gewaehlt.");
     }
 
     println!("Running {} strategic frameworks...", chosen.len());
@@ -81,22 +83,22 @@ fn main() -> Result<()> {
     };
     println!("Mission geladen ({} Zeichen).", mission_text.len());
 
-    // 3) Skill-Reports laden. In der vollen Implementierung würde hier der Agent
-    //    (LLM) pro Skill die 9-Phasen-Pipeline ausführen. Hier laden wir die
-    //    bereits erzeugten Analyse-JSONs aus dem Laura-Ordner, um den Orchestrator
-    //    real gegen echte Daten zu testen.
+    // 3) Skill-Reports laden (Test-Impl: echte Analyse-JSONs aus Laura-Ordner)
     let reports = load_reports_for(&cli.skills)?;
 
-    // 4) Jeden Report gegen schema.json validieren (structural check)
+    // 4) Jeden Report gegen schema.json validieren
     for r in &reports {
         validate_against_schema(r)?;
     }
-    println!("Alle {} Skill-Reports gegen schema.json validiert ✓", reports.len());
+    println!(
+        "Alle {} Skill-Reports gegen schema.json validiert ✓",
+        reports.len()
+    );
 
     // 5) Consensus Engine
     let consensus = consensus::resolve(&reports);
     println!(
-        "Consensus Score: {}%  |  alle primär = {}",
+        "Consensus Score: {}%  |  alle primaer = {}",
         consensus.consensus_score, consensus.all_agree_primary
     );
 
@@ -112,6 +114,7 @@ fn main() -> Result<()> {
         "divergences": consensus.divergences,
         "context_dimensions": consensus.context_dimensions,
         "skills": reports,
+        "failure_register": load_failure_register(),
     });
 
     match &cli.out {
@@ -130,11 +133,11 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-/// Lädt die Skill-Reports. Test-Implementierung: liest die echten Analyse-JSONs
+/// Laedt die Skill-Reports. Test-Implementierung: liest die echten Analyse-JSONs
 /// aus dem Laura-Ordner (desktop/do it for laura /<skill>_analysis.json).
 fn load_reports_for(skills: &[String]) -> Result<Vec<StrategyReport>> {
     let base = PathBuf::from(
-        std::env::var("HOME").unwrap_or_else(|_| "/home/eri-irfos".into()),
+        std::env::var("HOME").unwrap_or_else(|_| "/home/eri-irfos".into())
     )
     .join("Desktop/do it for laura ");
     let mut out = Vec::new();
@@ -142,14 +145,13 @@ fn load_reports_for(skills: &[String]) -> Result<Vec<StrategyReport>> {
         let p = base.join(format!("{}_analysis.json", s));
         if !p.exists() {
             anyhow::bail!(
-                "Kein Analyse-JSON für '{}' unter {} — Pipeline zuerst im Agent ausführen.",
+                "Kein Analyse-JSON fuer '{}' unter {} — Pipeline zuerst im Agent ausfuehren.",
                 s,
                 base.display()
             );
         }
         let r: StrategyReport =
             serde_json::from_str(&std::fs::read_to_string(&p)?).context("parse analysis json")?;
-        // cross_framework_themes aus Top-Level des Analysis-JSONs übernehmen
         let mut r = r;
         r.cross_framework_themes = serde_json::from_value(serde_json::Value::Array(
             std::fs::read_to_string(&p)
@@ -166,6 +168,19 @@ fn load_reports_for(skills: &[String]) -> Result<Vec<StrategyReport>> {
         out.push(r);
     }
     Ok(out)
+}
+
+/// Laedt das failure_register.json aus dem Laura-Ordner (4. Sektion des Reports).
+fn load_failure_register() -> serde_json::Value {
+    let base = PathBuf::from(
+        std::env::var("HOME").unwrap_or_else(|_| "/home/eri-irfos".into())
+    )
+    .join("Desktop/do it for laura ");
+    let p = base.join("failure_register.json");
+    match std::fs::read_to_string(&p) {
+        Ok(t) => serde_json::from_str(&t).unwrap_or(serde_json::Value::Null),
+        Err(_) => serde_json::Value::Null,
+    }
 }
 
 /// Structural validation gegen das standardisierte Schema (Pflichtfelder).
@@ -208,6 +223,12 @@ fn print_summary(c: &ConsensusResult, reports: &[StrategyReport]) {
             }
         }
     }
+    // Failure Register
+    if let Some(fp) = load_failure_register().get("eintraege") {
+        if let Some(arr) = fp.as_array() {
+            println!("\nVersagens-Register: {} Eintraege", arr.len());
+        }
+    }
     if let Some(fp) = reports.iter().find_map(|r| {
         if r.future_prediction.is_object() {
             Some(&r.future_prediction)
@@ -215,18 +236,33 @@ fn print_summary(c: &ConsensusResult, reports: &[StrategyReport]) {
             None
         }
     }) {
-        println!("\nFuture Prediction (aus {}):", reports.iter().find(|r| r.future_prediction.is_object()).map(|r| r.skill_id.clone()).unwrap_or_default());
+        println!(
+            "\nFuture Prediction (aus {}):",
+            reports
+                .iter()
+                .find(|r| r.future_prediction.is_object())
+                .map(|r| r.skill_id.clone())
+                .unwrap_or_default()
+        );
         if let Some(act) = fp.get("if_we_act").and_then(|v| v.as_array()) {
             for s in act {
                 if let (Some(h), Some(sc)) = (s.get("horizon"), s.get("scenario")) {
-                    println!("  [act {}] {}", h, sc.as_str().unwrap_or("").chars().take(60).collect::<String>());
+                    println!(
+                        "  [act {}] {}",
+                        h,
+                        sc.as_str().unwrap_or("").chars().take(60).collect::<String>()
+                    );
                 }
             }
         }
         if let Some(wait) = fp.get("if_we_wait").and_then(|v| v.as_array()) {
             if let Some(s) = wait.last() {
                 if let (Some(h), Some(sc)) = (s.get("horizon"), s.get("scenario")) {
-                    println!("  [wait {}] {}", h, sc.as_str().unwrap_or("").chars().take(60).collect::<String>());
+                    println!(
+                        "  [wait {}] {}",
+                        h,
+                        sc.as_str().unwrap_or("").chars().take(60).collect::<String>()
+                    );
                 }
             }
         }
