@@ -31,8 +31,12 @@ def esc(s):
 FORBIDDEN_FRAMEWORKS = [
     ("sun_tzu", "Perspektive 1"),
     ("sun mate", "Perspektive 1"),
+    ("sun tzu", "Perspektive 1"),
+    ("sun tzus", "Perspektive 1"),
     ("gabor maté", "Perspektive 1"),
     ("gabor mate", "Perspektive 1"),
+    ("gabor_mate_counsel", "Perspektive 1"),
+    ("gabor mate counsel", "Perspektive 1"),
     ("ooda", "Perspektive 2"),
     ("game theory", "Perspektive 4"),
     ("game-theoretic", "Perspektive 4"),
