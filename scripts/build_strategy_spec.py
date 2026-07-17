@@ -228,16 +228,16 @@ def build(consolidated: dict, facts: dict, title: str) -> dict:
         {"type": "para", "text": "Die faktische Lage, ausschließlich aus Quellen. "
          "Jede Behauptung referenziert eine Akte oder ein Dokument."},
     ]
-    # Fakten aus facts.json als Tabelle (uncut)
+    # Fakten aus facts.json als Tabelle (uncut) — sanitize für Laura/Anonymität
     entities = facts.get("entities", {})
     if entities:
         lage_blocks.append({
             "type": "table",
             "headers": ["Person", "Rolle", "Anzeigebereit", "Anz. Anzeigen", "Quelle"],
-            "rows": [[esc(n), esc(m.get("rolle", "—")),
+            "rows": [[sanitize(esc(n)), sanitize(esc(m.get("rolle", "—"))),
                       "JA" if m.get("anzeigebereit") else "NEIN",
                       str(m.get("anzahl_anzeigen", 0)),
-                      esc(m.get("quelle", "—"))]
+                      sanitize(esc(m.get("quelle", "—")))]
                      for n, m in entities.items()],
         })
     lage_blocks.append({
