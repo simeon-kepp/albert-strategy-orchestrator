@@ -63,30 +63,40 @@ def sanitize(text: str) -> str:
     return t
 
 
-def extract_text(v) -> str:
+def extract_text(v, _depth=0) -> str:
     """Konvertiert ein beliebiges Feld (Dict/List/String) in lesbaren Text.
 
     Das Orchestrator-JSON hat oft verschachtelte Dicts in 'analysis'/'summary'.
-    Wir nehmen den lesbaren Teil (report/summary/text) und werfen die
-    Roh-Struktur (context_dimensions, metrics, etc.) weg.
+    Wir gehen rekursiv durch und sammeln alle lesbaren String-Values
+    (außer reinen Metadaten-Keys wie 'id', 'skill_id', 'framework_version').
     """
     if v is None:
         return "—"
     if isinstance(v, str):
         return sanitize(v)
     if isinstance(v, dict):
-        # Priorität: report > summary > analysis > erste lesbare value
-        for key in ("report", "summary", "analysis", "text", "narrative"):
-            if key in v and isinstance(v[key], str):
+        # Priorität: bekannte Text-Keys
+        for key in ("report", "summary", "analysis", "text", "narrative", "opening"):
+            if key in v and isinstance(v[key], str) and len(v[key]) > 30:
                 return sanitize(v[key])
-        # Ansonsten: nur String-Values (keine verschachtelten Dicts)
+        # Ansonsten: rekursiv alle String-Values sammeln (außer Metadaten)
+        skip = {"id", "skill_id", "framework_version", "metrics", "sources",
+                "mission", "context_dimensions", "cross_framework_themes",
+                "detailed_strategies", "future_prediction"}
         parts = []
         for k, val in v.items():
-            if isinstance(val, str) and len(val) > 20:
-                parts.append(f"{k}: {val}")
-        return sanitize("\n".join(parts)) if parts else "—"
+            if k in skip:
+                continue
+            t = extract_text(val, _depth + 1)
+            if t and t != "—" and len(t) > 15:
+                parts.append(t)
+        if parts:
+            return sanitize("\n\n".join(parts[:4]))  # max 4 Sub-Texts
+        return "—"
     if isinstance(v, list):
-        return sanitize("\n".join(f"• {extract_text(i)}" for i in v[:6]))
+        items = [extract_text(i, _depth + 1) for i in v[:5]]
+        items = [i for i in items if i and i != "—"]
+        return sanitize("\n".join(f"• {i}" for i in items)) if items else "—"
     return sanitize(str(v))
 
 
