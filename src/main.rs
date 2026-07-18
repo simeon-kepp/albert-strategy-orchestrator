@@ -92,8 +92,23 @@ fn main() -> Result<()> {
     };
     println!("Mission geladen ({} Zeichen).", mission_text.len());
 
-    // 3) Skill-Reports laden (Test-Impl: echte Analyse-JSONs aus Laura-Ordner)
-    let reports = load_reports_for(&cli_skills)?;
+    // Case-Verzeichnis = der Ordner, in dem die Mission-Datei selbst liegt (per
+    // Konvention <case_root>/case/mission_*.txt). Vorher war dieser Pfad hart auf
+    // Lauras Ordner verdrahtet, unabhaengig davon, welche --mission tatsaechlich
+    // uebergeben wurde — pipeline.sh/call_the_swat.sh wurden bereits parametrisiert,
+    // aber diese Rust-Binary hat das nie mitbekommen. Faellt ohne --mission (stdin-
+    // Modus) auf Lauras Fall zurueck, fuer Abwaertskompatibilitaet.
+    let case_dir: PathBuf = match &cli.mission {
+        Some(p) => p.parent().map(|d| d.to_path_buf()).unwrap_or_else(|| {
+            PathBuf::from(std::env::var("HOME").unwrap_or_else(|_| "/home/eri-irfos".into()))
+                .join("Desktop/do it for laura /case")
+        }),
+        None => PathBuf::from(std::env::var("HOME").unwrap_or_else(|_| "/home/eri-irfos".into()))
+            .join("Desktop/do it for laura /case"),
+    };
+
+    // 3) Skill-Reports laden
+    let reports = load_reports_for(&cli_skills, &case_dir)?;
 
     // 4) Jeden Report gegen schema.json validieren
     for r in &reports {
@@ -111,10 +126,24 @@ fn main() -> Result<()> {
         consensus.consensus_score, consensus.all_agree_primary
     );
 
+    // future_prediction wurde vorher NUR fuer die stdout-Zusammenfassung
+    // (print_summary, find_map -> erster nicht-null Treffer) berechnet, aber
+    // nie in die persistierte --out-Datei geschrieben — beim Speichern gingen
+    // alle 4 Perspektiven-Prognosen stillschweigend verloren. Jetzt als Map
+    // ueber alle Skills, die tatsaechlich eine future_prediction geliefert
+    // haben (nicht nur die erste gefundene).
+    let future_predictions_by_skill: std::collections::HashMap<String, serde_json::Value> =
+        reports
+            .iter()
+            .filter(|r| r.future_prediction.is_object())
+            .map(|r| (r.skill_id.clone(), r.future_prediction.clone()))
+            .collect();
+
     // 6) Konsolidierten Report schreiben
     let consolidated = serde_json::json!({
         "n_skills": consensus.n_skills,
         "consensus_score": consensus.consensus_score,
+        "consensus_score_unweighted": consensus.consensus_score_unweighted,
         "all_agree_primary": consensus.all_agree_primary,
         "primary_coa": consensus.primary_coa,
         "confidence_levels": consensus.confidence_levels,
@@ -122,8 +151,9 @@ fn main() -> Result<()> {
         "cross_framework_themes": consensus.cross_framework_themes,
         "divergences": consensus.divergences,
         "context_dimensions": consensus.context_dimensions,
+        "future_predictions_by_skill": future_predictions_by_skill,
         "skills": reports,
-        "failure_register": load_failure_register(),
+        "failure_register": load_failure_register(&case_dir),
     });
 
     match &cli.out {
@@ -138,17 +168,13 @@ fn main() -> Result<()> {
         }
     }
 
-    print_summary(&consensus, &reports);
+    print_summary(&consensus, &reports, &case_dir);
     Ok(())
 }
 
 /// Laedt die Skill-Reports. Test-Implementierung: liest die echten Analyse-JSONs
 /// aus dem Laura-Ordner (desktop/do it for laura /<skill>_analysis.json).
-fn load_reports_for(skills: &[String]) -> Result<Vec<StrategyReport>> {
-    let base = PathBuf::from(
-        std::env::var("HOME").unwrap_or_else(|_| "/home/eri-irfos".into())
-    )
-    .join("Desktop/do it for laura ");
+fn load_reports_for(skills: &[String], base: &std::path::Path) -> Result<Vec<StrategyReport>> {
     let mut out = Vec::new();
     for s in skills {
         // Bevorzuge generic Version (falls vorhanden)
@@ -162,18 +188,12 @@ fn load_reports_for(skills: &[String]) -> Result<Vec<StrategyReport>> {
                 base.display()
             );
         }
-        let r: StrategyReport =
+        let mut r: StrategyReport =
             serde_json::from_str(&std::fs::read_to_string(&p)?).context("parse analysis json")?;
-        let mut r = r;
-        r.cross_framework_themes = serde_json::from_value(serde_json::Value::Array(
-            std::fs::read_to_string(&p)
-                .ok()
-                .and_then(|t| serde_json::from_str::<serde_json::Value>(&t).ok())
-                .and_then(|v| v.get("cross_framework_themes").cloned())
-                .and_then(|v| v.as_array().cloned())
-                .unwrap_or_default(),
-        ))
-        .unwrap_or_default();
+        // r.cross_framework_themes ist bereits aus der ersten Deserialisierung
+        // korrekt befuellt (StrategyReport hat das Feld direkt) — der vorherige
+        // zweite Roh-Read derselben Datei nur zur erneuten Extraktion war totes,
+        // dupliziertes I/O.
         r.detailed_strategies = r.report.detailed_strategies.clone();
         r.future_prediction = r.report.future_prediction.clone();
         r.context_dimensions = r.analysis.context_dimensions.clone();
@@ -182,12 +202,8 @@ fn load_reports_for(skills: &[String]) -> Result<Vec<StrategyReport>> {
     Ok(out)
 }
 
-/// Laedt das failure_register.json aus dem Laura-Ordner (4. Sektion des Reports).
-fn load_failure_register() -> serde_json::Value {
-    let base = PathBuf::from(
-        std::env::var("HOME").unwrap_or_else(|_| "/home/eri-irfos".into())
-    )
-    .join("Desktop/do it for laura ");
+/// Laedt das failure_register.json aus dem Case-Verzeichnis (4. Sektion des Reports).
+fn load_failure_register(base: &std::path::Path) -> serde_json::Value {
     let p = base.join("failure_register.json");
     match std::fs::read_to_string(&p) {
         Ok(t) => serde_json::from_str(&t).unwrap_or(serde_json::Value::Null),
@@ -212,10 +228,41 @@ fn validate_against_schema(r: &StrategyReport) -> Result<()> {
     if r.report.strategic_principles_applied.is_empty() {
         anyhow::bail!("strategic_principles_applied leer");
     }
+    // The remaining required fields per schema.json (report.reasoning, .decision_points,
+    // .implementation_steps, .warning_signs, .fallback_plans, .confidence_assessment) were
+    // previously never checked here at all — a skill whose output JSON silently drifted from
+    // its own schema.json (wrong field names, missing keys) passed validation every time
+    // because #[serde(default)] quietly fills empty string/Vec/struct defaults for anything
+    // missing, and this function never looked at those fields to notice. That's exactly how
+    // game_theory_analysis_generic.json shipped with an entirely empty report section for
+    // months without a single error. Check them for real now.
+    if r.report.reasoning.is_empty() {
+        anyhow::bail!("report.reasoning fehlt ({})", r.skill_id);
+    }
+    if r.report.decision_points.is_empty() {
+        anyhow::bail!("report.decision_points leer ({})", r.skill_id);
+    }
+    if r.report.confidence_assessment.level.is_empty() {
+        anyhow::bail!("report.confidence_assessment.level fehlt ({})", r.skill_id);
+    }
+    // Diese 3 waren im obigen Kommentar seit 2026-07-18 als "jetzt geprueft"
+    // dokumentiert, aber nie tatsaechlich implementiert — nur reasoning,
+    // decision_points und confidence_assessment.level bekamen echte Checks.
+    // Genau die Luecke, die den game_theory-Vorfall ermoeglicht hat, war also
+    // fuer implementation_steps/warning_signs/fallback_plans noch offen.
+    if r.report.implementation_steps.is_empty() {
+        anyhow::bail!("report.implementation_steps leer ({})", r.skill_id);
+    }
+    if r.report.warning_signs.is_empty() {
+        anyhow::bail!("report.warning_signs leer ({})", r.skill_id);
+    }
+    if r.report.fallback_plans.is_empty() {
+        anyhow::bail!("report.fallback_plans leer ({})", r.skill_id);
+    }
     Ok(())
 }
 
-fn print_summary(c: &ConsensusResult, reports: &[StrategyReport]) {
+fn print_summary(c: &ConsensusResult, reports: &[StrategyReport], case_dir: &std::path::Path) {
     println!("\n=== MISSION SCORECARD (Consensus) ===");
     println!("Skills            : {}", c.n_skills);
     println!("Consensus Score   : {}%", c.consensus_score);
@@ -236,7 +283,7 @@ fn print_summary(c: &ConsensusResult, reports: &[StrategyReport]) {
         }
     }
     // Failure Register
-    if let Some(fp) = load_failure_register().get("eintraege") {
+    if let Some(fp) = load_failure_register(case_dir).get("eintraege") {
         if let Some(arr) = fp.as_array() {
             println!("\nVersagens-Register: {} Eintraege", arr.len());
         }

@@ -66,6 +66,11 @@ pub struct Analysis {
     pub phase6_courses_of_action: Vec<CourseOfAction>,
     #[serde(default)]
     pub phase7_counter_strategy: serde_json::Value,
+    /// Steelman gegen die eigene primaere Empfehlung (Phase 7b, Hardening
+    /// 2026-07-18) — optional/#[serde(default)] waehrend des Rollouts, noch
+    /// nicht in validate_against_schema hart geprueft.
+    #[serde(default)]
+    pub phase7b_self_critique: serde_json::Value,
     #[serde(default)]
     pub phase8_optimization: serde_json::Value,
     #[serde(default)]
@@ -105,6 +110,11 @@ pub struct Report {
     pub detailed_strategies: serde_json::Value,
     #[serde(default)]
     pub future_prediction: serde_json::Value,
+    /// Nur bei Pass-2 (Debatten-Runde) befuellt — Reaktion auf die anderen 3
+    /// Frameworks' Pass-1-Positionen (Hardening 2026-07-18). Optional/
+    /// #[serde(default)], leer bei Pass-1-only Laeufen.
+    #[serde(default)]
+    pub debate_response: serde_json::Value,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
