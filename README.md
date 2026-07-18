@@ -1,7 +1,7 @@
 # albert-strategy-orchestrator
 
-> **Human rights are not subject to negotiation.**
-> — RFI-IRFOS × Emergent Interaction Lab, core doctrine.
+## Human rights are not subject to negotiation.
+
 
 
 Multi-Framework Strategy Orchestrator (Rust CLI).
