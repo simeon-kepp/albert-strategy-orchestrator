@@ -1,5 +1,9 @@
 # albert-strategy-orchestrator
 
+> **Human rights are not subject to negotiation.**
+> — RFI-IRFOS × Emergent Interaction Lab, core doctrine.
+
+
 Multi-Framework Strategy Orchestrator (Rust CLI).
 
 Lädt mehrere Strategy-Skills aus `~/.hermes/skills/strategy/`, validiert sie
